@@ -1,3 +1,6 @@
+import Nav from "@/app/components/Nav";
+import "@/app/globals.css"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -5,7 +8,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+        <head>
+
+        </head>
+      <body>
+        <Nav/>
+        {children}
+      </body>
     </html>
   );
 }
