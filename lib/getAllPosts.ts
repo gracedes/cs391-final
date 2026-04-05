@@ -1,5 +1,5 @@
 
-import {PostProps} from "@/lib/PostProps";
+import {PostProps} from "@/app/interfaces/PostProps";
 import getCollection, {POSTS_COLLECTION} from "@/lib/db";
 
 export default async function getAllPosts():Promise<PostProps[]>{
