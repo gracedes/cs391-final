@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 
 const NavBar = styled.nav`
     display: flex;
@@ -18,7 +19,12 @@ const NavBar = styled.nav`
         margin: 0 2vh;
         width: 6vh;
         height: 6vh;
-        background-color: white;
+        position: relative;
+        color: white;
+        &#pfp {
+            border-radius: 6vh;
+            overflow: hidden;
+        }
     }
     .center-links {
         margin: 0 auto;
@@ -29,13 +35,15 @@ const NavBar = styled.nav`
 export default function Nav() {
     return (
         <NavBar>
-            <Link className="button-link" href=""></Link>
+            <Link className="button-link" href=""><Image src={"/menu.svg"} alt={"menu icon"} fill={true} /></Link>
             <div className="center-links">
                 <Link className="text-link" href="/discover">Discover</Link>
                 <Link className="text-link" href="/">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
-            <Link className="button-link" href=""></Link>
+            <Link className="button-link" id="pfp" href="">
+                <Image src={"/temp-pfp.jpg"} alt={"your profile picture"} fill={true} />
+            </Link>
         </NavBar>
     );
-}
+};
