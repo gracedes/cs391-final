@@ -9,6 +9,7 @@ if(!MONGO_URI){
 const DB_NAME = "cs391-final";
 
 export const POSTS_COLLECTION = "posts-collection";
+export const USERS_COLLECTION = "users"
 
 let client: MongoClient | null=null;
 let db: Db | null=null;
