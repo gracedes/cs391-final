@@ -10,6 +10,7 @@ const NavBar = styled.nav`
     background-color: #232C33;
     height: 10vh;
     width: 100vw;
+    font-size: calc(14px + 0.75vw);
     .text-link {
         text-decoration: none;
         color: white;
@@ -17,12 +18,12 @@ const NavBar = styled.nav`
     }
     .button-link {
         margin: 0 2vh;
-        width: 6vh;
-        height: 6vh;
+        width: 7vh;
+        height: 7vh;
         position: relative;
         color: white;
         &#pfp {
-            border-radius: 6vh;
+            border-radius: 7vh;
             overflow: hidden;
         }
     }
