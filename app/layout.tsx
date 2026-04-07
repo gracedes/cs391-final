@@ -1,5 +1,5 @@
-import Nav from "@/app/components/Nav";
-import "@/app/globals.css"
+import Nav from "./components/Nav";
+import "./globals.css"
 
 export default function RootLayout({
   children,
