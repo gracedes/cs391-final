@@ -1,10 +1,13 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import getAllPosts from "@/lib/getAllPosts";
+import PostsDisplay from "@/app/components/PostDisplay";
 
-export default function Home() {
-  return (
-    <h2>
-      Hello
-    </h2>
+export default async function Home() {
+
+    const posts = await getAllPosts();
+
+    return (
+      <>
+          <PostsDisplay inputPosts={posts}/>
+      </>
   );
 }
