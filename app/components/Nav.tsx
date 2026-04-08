@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 
+// TODO: add new post button?
+
 const NavBar = styled.nav`
     display: flex;
     flex-direction: row;
