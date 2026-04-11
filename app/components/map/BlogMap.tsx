@@ -8,7 +8,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { PostProps } from '@/app/interfaces/PostProps';
 import PostMarker from './PostMarker';
 import PostPopup from './PostPopup';
-import MapClusterMarker from "@/app/components/MapClusterMarker";
+import MapClusterMarker from "@/app/components/map/MapClusterMarker";
 import styled from "styled-components";
 
 const MapWrapper = styled.div`
