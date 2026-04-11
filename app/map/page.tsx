@@ -1,4 +1,4 @@
-import BlogMap from "@/app/components/BlogMap";
+import BlogMap from "@/app/components/map/BlogMap";
 import styled from "styled-components";
 import getAllPosts from "@/lib/getAllPosts";
 
