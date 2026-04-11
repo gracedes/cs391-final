@@ -37,6 +37,8 @@ const PopupFooter = styled.div`
 const PopupStats = styled.span`
   font-size: 12px;
   color: #888;
+  white-space: nowrap;
+  margin-right: 5%;
 `;
 
 const StyledLink = styled(Link)`
@@ -48,6 +50,7 @@ const StyledLink = styled(Link)`
   font-size: 14px;
   font-weight: bold;
   transition: background-color 0.2s;
+  text-align: center;
 
   &:hover {
     background-color: #059669;
