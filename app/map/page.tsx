@@ -1,4 +1,3 @@
-import { PostProps } from "@/app/interfaces/PostProps";
 import BlogMap from "@/app/components/BlogMap";
 import styled from "styled-components";
 import getAllPosts from "@/lib/getAllPosts";
