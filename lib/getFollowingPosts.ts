@@ -22,6 +22,8 @@ export default async function getFollowingPosts(currentUsername: string): Promis
             image: p.image,
             upvotes: p.upvotes,
             downvotes: p.downvotes,
+            latitude: p.latitude,
+            longitude: p.longitude,
         }
     ));
 
