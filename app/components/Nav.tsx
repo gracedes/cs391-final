@@ -34,6 +34,7 @@ const NavBar = styled.nav`
 `;
 
 export default function Nav() {
+    // TODO: change test proflie href later
     return (
         <NavBar>
             <Link className="button-link" href=""><Image src={"/menu.svg"} alt={"menu icon"} fill={true} /></Link>
@@ -42,7 +43,7 @@ export default function Nav() {
                 <Link className="text-link" href="/">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
-            <Link className="button-link" id="pfp" href="">
+            <Link className="button-link" id="pfp" href="/edward">
                 <Image src={"/temp-pfp.jpg"} alt={"your profile picture"} fill={true} />
             </Link>
         </NavBar>
