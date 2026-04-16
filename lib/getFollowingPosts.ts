@@ -1,11 +1,20 @@
 import { PostProps } from "@/app/interfaces/PostProps";
-import getCollection, { USERS_COLLECTION, POSTS_COLLECTION } from "@/lib/db";
+import getCollection, { POSTS_COLLECTION } from "@/lib/db";
+import {auth} from "@/lib/auth";
+import {headers} from "next/headers";
 
-export default async function getFollowingPosts(currentUsername: string): Promise<PostProps[]> {
-    const usersCollection = await getCollection(USERS_COLLECTION);
-    const currentUser = await usersCollection.findOne({ username: currentUsername });
-    const followedUsernames: string[] = currentUser?.following || [];
+export default async function getFollowingPosts(): Promise<PostProps[]> {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
 
+    if(!session || !session.user){
+        console.log("No active session found");
+        return [];
+    }
+
+    const currentUser = session.user as any;
+    const followedUsernames: string[] = currentUser.following || [];
     if (followedUsernames.length === 0) {
         return [];
     }
