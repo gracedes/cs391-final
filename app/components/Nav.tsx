@@ -38,8 +38,8 @@ export default function Nav() {
         <NavBar>
             <Link className="button-link" href=""><Image src={"/menu.svg"} alt={"menu icon"} fill={true} /></Link>
             <div className="center-links">
-                <Link className="text-link" href="/discover">Discover</Link>
-                <Link className="text-link" href="/">Following</Link>
+                <Link className="text-link" href="/">Discover</Link>
+                <Link className="text-link" href="/following">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
             <Link className="button-link" id="pfp" href="">
