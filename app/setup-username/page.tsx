@@ -3,6 +3,7 @@
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 import {authClient} from "@/lib/auth-client";
+import {isUsernameAvailable} from "@/lib/checkUsername";
 
 export default function SetupUsernamePage() {
     const [error, setError] = useState("");
@@ -24,6 +25,14 @@ export default function SetupUsernamePage() {
 
         if (cleanUsername.includes(" ")){
             setError("Username cannot contain spaces.");
+            setIsSubmitting(false);
+            return;
+        }
+
+        const available = await isUsernameAvailable(cleanUsername);
+
+        if(!available){
+            setError("Sorry, that username is already taken. Please choose another.");
             setIsSubmitting(false);
             return;
         }
