@@ -20,6 +20,7 @@ export default async function FollowingPage(){
 
     const followingPosts = await getFollowingPosts();
 
+
     return(
         <PostsDisplay inputPosts={followingPosts}/>
     );
