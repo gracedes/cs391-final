@@ -3,8 +3,6 @@
 import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
 import {useState} from "react";
-import getUpvote from "@/lib/getUpvote";
-import getDownvote from "@/lib/getDownvote";
 
 const PostViewBg = styled.div`
     background-color: #5A7D7C;
@@ -82,73 +80,64 @@ const VoteText = styled.p`
 `;
 
 
-export default async function PostView({ post }: { post: PostProps }) {
+export default function PostView({ post }: { post: PostProps }) {
     const [upvotes, setUpvotes] = useState(post.upvotes);
     const [downvotes, setDownvotes] = useState(post.downvotes);
-
-    const [userVote, setUserVote] = useState<"up" | "down" | null>(null);
+    const [isVoting, setIsVoting] = useState(false);
 
     async function handleUpvote() {
-        if (userVote === "up") return; // already upvoted
+        if (isVoting) return;
+        setIsVoting(true);
 
-        await fetch(`/api/posts/${post.id}/upvote`, {
-            method: "POST",
-        });
+        try {
+            const response = await fetch(`/api/posts/${post.id}/upvote`, {
+                method: "POST",
+            });
 
-        if (userVote === "down") {
-            // switching vote
-            setDownvotes((prev) => prev - 1);
+            if (!response.ok) {
+                throw new Error("Failed to upvote");
+            }
+
+            const updatedPost = await response.json();
+            setUpvotes(updatedPost.upvotes);
+            setDownvotes(updatedPost.downvotes);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsVoting(false);
         }
-
-        setUpvotes((prev) => prev + 1);
-        setUserVote("up");
     }
 
     async function handleDownvote() {
-        if (userVote === "down") return; // already downvoted
+        if (isVoting) return;
+        setIsVoting(true);
 
-        await fetch(`/api/posts/${post.id}/downvote`, {
-            method: "POST",
-        });
+        try {
+            const response = await fetch(`/api/posts/${post.id}/downvote`, {
+                method: "POST",
+            });
 
-        if (userVote === "up") {
-            // switching vote
-            setUpvotes((prev) => prev - 1);
+            if (!response.ok) {
+                throw new Error("Failed to downvote");
+            }
+
+            const updatedPost = await response.json();
+            setUpvotes(updatedPost.upvotes);
+            setDownvotes(updatedPost.downvotes);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsVoting(false);
         }
-
-        setDownvotes((prev) => prev + 1);
-        setUserVote("down");
     }
+
     return (
-        <PostViewBg>
-            <PostHeader>
-                <TitleAndUser>
-                    <PostTitle>{post.title}</PostTitle>
-                    <Username>By {post.username}</Username>
-                </TitleAndUser>
+        <VoteSection>
+            <button onClick={handleUpvote} disabled={isVoting}>⬆ Upvote</button>
+            <VoteText>{upvotes}</VoteText>
 
-                <TagsDiv>
-                    {post.tags.map((tag) => (
-                        <PostTag key={tag}>{tag}</PostTag>
-                    ))}
-                </TagsDiv>
-            </PostHeader>
-
-            {post.image && <PostImage src={post.image} alt={post.title} />}
-
-            <PostContent>{post.content}</PostContent>
-
-            <VoteSection>
-                <button onClick={handleUpvote} disabled={userVote === "up"}>
-                    ⬆ Upvote
-                </button>
-                <VoteText>{upvotes}</VoteText>
-
-                <button onClick={handleDownvote} disabled={userVote === "down"}>
-                    ⬇ Downvote
-                </button>
-                <VoteText>{downvotes}</VoteText>
-            </VoteSection>
-        </PostViewBg>
+            <button onClick={handleDownvote} disabled={isVoting}>⬇ Downvote</button>
+            <VoteText>{downvotes}</VoteText>
+        </VoteSection>
     );
 }
