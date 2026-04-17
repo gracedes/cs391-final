@@ -18,6 +18,8 @@ export default async function getAllPosts():Promise<PostProps[]>{
                 image: p.image,
                 upvotes:p.upvotes,
                 downvotes:p.downvotes,
+                latitude: p.latitude,
+                longitude: p.longitude
             }
         )
     )
