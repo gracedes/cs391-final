@@ -2,6 +2,9 @@
 
 import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
+import {useState} from "react";
+import getUpvote from "@/lib/getUpvote";
+import getDownvote from "@/lib/getDownvote";
 
 const PostViewBg = styled.div`
     background-color: #5A7D7C;
@@ -78,9 +81,44 @@ const VoteText = styled.p`
     margin: 0;
 `;
 
-export default function PostView({ post }: { post: PostProps }) {
-    const uniqueTags = Array.from(new Set(post.tags));
 
+export default async function PostView({ post }: { post: PostProps }) {
+    const [upvotes, setUpvotes] = useState(post.upvotes);
+    const [downvotes, setDownvotes] = useState(post.downvotes);
+
+    const [userVote, setUserVote] = useState<"up" | "down" | null>(null);
+
+    async function handleUpvote() {
+        if (userVote === "up") return; // already upvoted
+
+        await fetch(`/api/posts/${post.id}/upvote`, {
+            method: "POST",
+        });
+
+        if (userVote === "down") {
+            // switching vote
+            setDownvotes((prev) => prev - 1);
+        }
+
+        setUpvotes((prev) => prev + 1);
+        setUserVote("up");
+    }
+
+    async function handleDownvote() {
+        if (userVote === "down") return; // already downvoted
+
+        await fetch(`/api/posts/${post.id}/downvote`, {
+            method: "POST",
+        });
+
+        if (userVote === "up") {
+            // switching vote
+            setUpvotes((prev) => prev - 1);
+        }
+
+        setDownvotes((prev) => prev + 1);
+        setUserVote("down");
+    }
     return (
         <PostViewBg>
             <PostHeader>
@@ -90,7 +128,7 @@ export default function PostView({ post }: { post: PostProps }) {
                 </TitleAndUser>
 
                 <TagsDiv>
-                    {uniqueTags.map((tag) => (
+                    {post.tags.map((tag) => (
                         <PostTag key={tag}>{tag}</PostTag>
                     ))}
                 </TagsDiv>
@@ -101,8 +139,15 @@ export default function PostView({ post }: { post: PostProps }) {
             <PostContent>{post.content}</PostContent>
 
             <VoteSection>
-                <VoteText>⬆ Upvotes: {post.upvotes}</VoteText>
-                <VoteText>⬇ Downvotes: {post.downvotes}</VoteText>
+                <button onClick={handleUpvote} disabled={userVote === "up"}>
+                    ⬆ Upvote
+                </button>
+                <VoteText>{upvotes}</VoteText>
+
+                <button onClick={handleDownvote} disabled={userVote === "down"}>
+                    ⬇ Downvote
+                </button>
+                <VoteText>{downvotes}</VoteText>
             </VoteSection>
         </PostViewBg>
     );
