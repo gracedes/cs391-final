@@ -1,6 +1,11 @@
+"use client"
+
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
+import LoginButton from "@/app/components/auth/LoginInButton";
+import {authClient} from "@/lib/auth-client";
+import SignOutButton from "@/app/components/auth/SignOutButton";
 
 const NavBar = styled.nav`
     display: flex;
@@ -34,14 +39,17 @@ const NavBar = styled.nav`
 `;
 
 export default function Nav() {
+    const { data: session, isPending } = authClient.useSession();
+
     return (
         <NavBar>
             <Link className="button-link" href=""><Image src={"/menu.svg"} alt={"menu icon"} fill={true} /></Link>
             <div className="center-links">
-                <Link className="text-link" href="/discover">Discover</Link>
-                <Link className="text-link" href="/">Following</Link>
+                <Link className="text-link" href="/">Discover</Link>
+                <Link className="text-link" href="/following">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
+            {isPending ? (<div></div>) : session ? (<SignOutButton/>) : (<LoginButton/>)}
             <Link className="button-link" id="pfp" href="">
                 <Image src={"/temp-pfp.jpg"} alt={"your profile picture"} fill={true} />
             </Link>
