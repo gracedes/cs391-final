@@ -3,9 +3,8 @@
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
-import LoginButton from "@/app/components/auth/LoginInButton";
 import {authClient} from "@/lib/auth-client";
-import SignOutButton from "@/app/components/auth/SignOutButton";
+import ProfileDropdown from "@/app/components/ProfileDropdown";
 
 const NavBar = styled.nav`
     display: flex;
@@ -27,10 +26,6 @@ const NavBar = styled.nav`
         height: 7vh;
         position: relative;
         color: white;
-        &#pfp {
-            border-radius: 7vh;
-            overflow: hidden;
-        }
     }
     .center-links {
         margin: 0 auto;
@@ -49,10 +44,7 @@ export default function Nav() {
                 <Link className="text-link" href="/following">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
-            {isPending ? (<div></div>) : session ? (<SignOutButton/>) : (<LoginButton/>)}
-            <Link className="button-link" id="pfp" href="">
-                <Image src={"/temp-pfp.jpg"} alt={"your profile picture"} fill={true} />
-            </Link>
+            <ProfileDropdown session={session} isPending={isPending}/>
         </NavBar>
     );
 };
