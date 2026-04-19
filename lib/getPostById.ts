@@ -19,6 +19,7 @@ interface PostDocument {
     longitude?: number;
     latitude?: number;
     votes?: VoteEntry[];
+    createdAt?: Date;
 }
 
 export default async function getPostById(
@@ -49,5 +50,6 @@ export default async function getPostById(
         longitude: data.longitude,
         latitude: data.latitude,
         currentUserVote: currentVote,
+        createdAt: data.createdAt?.toISOString() ?? "",
     };
 }
