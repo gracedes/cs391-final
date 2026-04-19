@@ -2,9 +2,9 @@ import {PostProps} from "@/app/interfaces/PostProps";
 
 export interface UserProps {
     username: string;
-    nickname: string;
+    name: string;
     bio?: string;
-    pfp: string;
+    image: string;
     following?: string[];
     tags?: string[];
     posts?: PostProps[];

@@ -43,7 +43,7 @@ export default function Nav() {
                 <Link className="text-link" href="/">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
-            <Link className="button-link" id="pfp" href="/edward">
+            <Link className="button-link" id="pfp" href="/user/edward">
                 <Image src={"/temp-pfp.jpg"} alt={"your profile picture"} fill={true} />
             </Link>
         </NavBar>
