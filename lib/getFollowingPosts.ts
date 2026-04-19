@@ -3,7 +3,8 @@ import getCollection, { POSTS_COLLECTION } from "@/lib/db";
 import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 
-export default async function getFollowingPosts(): Promise<PostProps[]> {
+export default async function getFollowingPosts(    sortOrder: "newest" | "oldest" = "newest"
+): Promise<PostProps[]> {
     const session = await auth.api.getSession({
         headers: await headers(),
     });

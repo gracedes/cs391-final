@@ -86,7 +86,7 @@ const PostTime = styled.p`
     color: #EAEAEA;
 `;
 
-export default  function PostView({ post }: { post: PostProps }) {
+export default function PostView({ post }: { post: PostProps }) {
     const [upvotes, setUpvotes] = useState(post.upvotes);
     const [downvotes, setDownvotes] = useState(post.downvotes);
 
