@@ -9,4 +9,5 @@ export interface PostProps {
     downvotes: number;
     longitude?: number;
     latitude?: number;
+    currentUserVote?: "up" | "down" | null;
 }

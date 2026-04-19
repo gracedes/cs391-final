@@ -1,18 +1,44 @@
 import { PostProps } from "@/app/interfaces/PostProps";
-import getCollection, { USERS_COLLECTION, POSTS_COLLECTION } from "@/lib/db";
-import {ObjectId} from "mongodb";
+import getCollection, { POSTS_COLLECTION } from "@/lib/db";
+import { ObjectId } from "mongodb";
 
-export default async function getPostById(id: string): Promise<PostProps|null> {
+interface VoteEntry {
+    userId: string;
+    type: "up" | "down";
+}
+
+interface PostDocument {
+    _id: ObjectId;
+    title: string;
+    username: string;
+    tags: string[];
+    content: string;
+    image?: string;
+    upvotes: number;
+    downvotes: number;
+    longitude?: number;
+    latitude?: number;
+    votes?: VoteEntry[];
+}
+
+export default async function getPostById(
+    id: string,
+    currentUserId?: string
+): Promise<PostProps | null> {
     const postId = ObjectId.createFromHexString(id);
 
     const postsCollection = await getCollection(POSTS_COLLECTION);
-    const data = await postsCollection.findOne({_id:postId});
-    if(data==null){
+    const data = await postsCollection.findOne({ _id: postId }) as PostDocument | null;
+
+    if (data == null) {
         return null;
     }
 
+    const currentVote =
+        data.votes?.find((vote) => vote.userId === currentUserId)?.type ?? null;
+
     return {
-        id: id,
+        id,
         title: data.title,
         username: data.username,
         tags: data.tags,
@@ -21,6 +47,7 @@ export default async function getPostById(id: string): Promise<PostProps|null> {
         upvotes: data.upvotes,
         downvotes: data.downvotes,
         longitude: data.longitude,
-        latitude: data.latitude
+        latitude: data.latitude,
+        currentUserVote: currentVote,
     };
 }
