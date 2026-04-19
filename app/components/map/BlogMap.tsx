@@ -56,7 +56,7 @@ export default function BlogMap({ posts }: { posts: PostProps[] }) {
     }, []);
 
     const points = posts
-        .filter(post => post.longitude !== undefined && post.latitude !== undefined)
+        .filter(post => post.longitude != null && post.latitude !== undefined)
         .map(post => ({
         type: 'Feature' as const,
         properties: { cluster: false, postId: post.id },

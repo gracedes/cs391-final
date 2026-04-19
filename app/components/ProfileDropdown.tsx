@@ -9,6 +9,7 @@ import styled from "styled-components";
 const DropdownContainer = styled.div`
     position: relative;
     display: inline-block;
+    
 `;
 
 const ProfileButton = styled.button`

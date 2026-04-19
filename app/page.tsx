@@ -1,6 +1,12 @@
 import getAllPosts from "@/lib/getAllPosts";
 import PostsDisplay from "@/app/components/PostDisplay";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Revival | Discover",
+    description: "Revival's Discover page",
+};
 
 export default async function Home({searchParams,}: { searchParams: Promise<{ sort?: string }>;
 }) {

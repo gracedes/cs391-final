@@ -1,3 +1,4 @@
+
 import {PostProps} from "@/app/interfaces/PostProps";
 import getCollection, {POSTS_COLLECTION} from "@/lib/db";
 

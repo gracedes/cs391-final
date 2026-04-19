@@ -4,6 +4,12 @@ import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 import {redirect} from "next/navigation";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Revival | Following",
+    description: "Revival's Following page",
+};
 
 export default async function FollowingPage({searchParams,}: {
     searchParams: Promise<{ sort?: string }>;
@@ -25,6 +31,7 @@ export default async function FollowingPage({searchParams,}: {
     const sortOrder = params.sort === "oldest" ? "oldest" : "newest";
 
     const followingPosts = await getFollowingPosts(sortOrder);
+
 
     return(
         <>
