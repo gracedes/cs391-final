@@ -85,39 +85,43 @@ export default  function PostView({ post }: { post: PostProps }) {
     const [upvotes, setUpvotes] = useState(post.upvotes);
     const [downvotes, setDownvotes] = useState(post.downvotes);
 
-    const [userVote, setUserVote] = useState<"up" | "down" | null>(null);
+    const [userVote, setUserVote] = useState<"up" | "down" | null>(
+        post.currentUserVote ?? null
+    );
 
     async function handleUpvote() {
-        if (userVote === "up") return; // already upvoted
-
-        await fetch(`/api/posts/${post.id}/upvote`, {
+        const response = await fetch(`/api/posts/${post.id}/upvote`, {
             method: "POST",
         });
 
-        if (userVote === "down") {
-            // switching vote
-            setDownvotes((prev) => prev - 1);
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Upvote failed:", response.status, errorText);
+            return;
         }
 
-        setUpvotes((prev) => prev + 1);
+        const updatedPost = await response.json();
+        setUpvotes(updatedPost.upvotes);
+        setDownvotes(updatedPost.downvotes);
         setUserVote("up");
     }
 
     async function handleDownvote() {
-        if (userVote === "down") return; // already downvoted
-
-        await fetch(`/api/posts/${post.id}/downvote`, {
+        const response = await fetch(`/api/posts/${post.id}/downvote`, {
             method: "POST",
         });
 
-        if (userVote === "up") {
-            // switching vote
-            setUpvotes((prev) => prev - 1);
+        if (!response.ok) {
+            console.error("Failed to downvote");
+            return;
         }
 
-        setDownvotes((prev) => prev + 1);
+        const updatedPost = await response.json();
+        setUpvotes(updatedPost.upvotes);
+        setDownvotes(updatedPost.downvotes);
         setUserVote("down");
     }
+
     return (
         <PostViewBg>
             <PostHeader>
