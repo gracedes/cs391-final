@@ -5,6 +5,8 @@ import getCollection, {POSTS_COLLECTION} from "@/lib/db";
 
 
 export default async function makeBlogPost(title:string, content:string, tags: string[], username: string):Promise<PostProps | null>{
+    const createdAt = new Date();
+
     const p ={
         title: title,
         username: username,
@@ -12,6 +14,7 @@ export default async function makeBlogPost(title:string, content:string, tags: s
         tags: tags,
         upvotes: 0,
         downvotes: 0,
+        createdAt,
     }
 
     const postsCollection = await getCollection(POSTS_COLLECTION);
@@ -22,5 +25,9 @@ export default async function makeBlogPost(title:string, content:string, tags: s
     }
 
 
-    return {...p, id: res.insertedId.toHexString()};
+    return {
+        ...p,
+        id: res.insertedId.toHexString(),
+        createdAt: createdAt.toISOString(),
+    };
 }
