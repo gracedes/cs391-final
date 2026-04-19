@@ -80,6 +80,11 @@ const VoteText = styled.p`
     margin: 0;
 `;
 
+const PostTime = styled.p`
+    margin: 0.5vw 0;
+    font-size: 0.95rem;
+    color: #EAEAEA;
+`;
 
 export default  function PostView({ post }: { post: PostProps }) {
     const [upvotes, setUpvotes] = useState(post.upvotes);
@@ -152,6 +157,9 @@ export default  function PostView({ post }: { post: PostProps }) {
                 </button>
                 <VoteText>{downvotes}</VoteText>
             </VoteSection>
+            <PostTime>{post.createdAt
+                ? new Date(post.createdAt).toLocaleString()
+                : ""}</PostTime>
         </PostViewBg>
     );
 }
