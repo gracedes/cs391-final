@@ -1,12 +1,8 @@
 "use client";
 
-import {useParams} from "next/navigation";
-import getProfile from "@/lib/getProfile";
-import {UserProps} from "@/app/interfaces/UserProps";
-import {useState} from "react";
-import PostsDisplay from "@/app/components/PostDisplay";
 import UserInfo from "@/app/components/profile/UserInfo";
 import styled from "styled-components";
+import { useParams } from "next/navigation";
 
 const ProfilePageDiv = styled.div`
     width: 100vw;
@@ -17,7 +13,8 @@ const ProfilePageDiv = styled.div`
 `
 
 export default function ProfilePage() {
-    const username = window.location.pathname.split("/")[-1];
+    const params = useParams();
+    const username = params.profile as string;
     console.log("username: ", username);
 
     return (
