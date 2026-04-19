@@ -210,13 +210,13 @@ const StyledButton = styled.button`
     padding: 1.5% 2%;
     border: none;
     border-radius: 8px;
-    background-color: darkgrey;
+    background-color: #3a3a40;
     color: white;
     font-size: calc(2px + 1.4vw);
     cursor: pointer;
 
     &:hover {
-        background-color: grey;
+        background-color: #333238;
     }
 `;
 
