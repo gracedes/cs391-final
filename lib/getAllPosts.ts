@@ -1,4 +1,3 @@
-
 import {PostProps} from "@/app/interfaces/PostProps";
 import getCollection, {POSTS_COLLECTION} from "@/lib/db";
 
@@ -19,7 +18,8 @@ export default async function getAllPosts():Promise<PostProps[]>{
                 upvotes:p.upvotes,
                 downvotes:p.downvotes,
                 latitude: p.latitude,
-                longitude: p.longitude
+                longitude: p.longitude,
+                createdAt: p.createdAt,
             }
         )
     )
