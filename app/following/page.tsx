@@ -3,6 +3,12 @@ import getFollowingPosts from "@/lib/getFollowingPosts";
 import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 import {redirect} from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Revival | Following",
+    description: "Revival's Following page",
+};
 
 export default async function FollowingPage(){
     const session = await auth.api.getSession({
@@ -19,6 +25,7 @@ export default async function FollowingPage(){
     }
 
     const followingPosts = await getFollowingPosts();
+
 
     return(
         <PostsDisplay inputPosts={followingPosts}/>

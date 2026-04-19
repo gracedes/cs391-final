@@ -3,6 +3,92 @@ import { useState } from "react";
 import styled from "styled-components";
 import makeBlogPost from "@/lib/makeBlogPost";
 
+const PageTitle = styled.h1`
+    margin-top: 2%;
+    margin-bottom: 2%;
+    font-size: calc(2px + 2.2vw);
+    color: white;
+`;
+
+const PageWrapper = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    background-color: white;
+`;
+
+const FormSection = styled.div`
+    width: 80%;
+    height: 100%;
+    background-color: #5A7D7C;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3% 0 4% 0;
+`;
+
+const StyledForm = styled.form`
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const SuccessMessage = styled.h2`
+    color: green;
+    text-align: center;
+    margin-bottom: 2%;
+    font-size: calc(2px + 1.6vw);
+`;
+
+const StyledInput = styled.input`
+    width: 100%;
+    padding: 2%;
+    margin-bottom: 7%;
+    border: 1px solid #ccc;
+    outline: none;
+    background-color: white;
+    font-size: calc(2px + 1.4vw);
+    border-radius: 8px;
+    box-sizing: border-box;
+`;
+
+const StyledTextarea = styled.textarea`
+    width: 100%;
+    height: 20%;
+    padding: 2%;
+    margin-bottom: 5%;
+    border: 1px solid #ccc;
+    outline: none;
+    background-color: white;
+    font-size: calc(2px + 1.4vw);
+    border-radius: 8px;
+    resize: vertical;
+    box-sizing: border-box;
+`;
+
+const ButtonWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`;
+
+const StyledButton = styled.button`
+    width: 15%;
+    padding: 1.5% 2%;
+    border: none;
+    border-radius: 8px;
+    background-color: #3a3a40;
+    color: white;
+    font-size: calc(2px + 1.4vw);
+    cursor: pointer;
+
+    &:hover {
+        background-color: #333238;
+    }
+`;
+
 export default function NewPostForm() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -83,88 +169,3 @@ export default function NewPostForm() {
     );
 }
 
-const PageTitle = styled.h1`
-    margin-top: 2%;
-    margin-bottom: 2%;
-    font-size: calc(2px + 2.2vw);
-    color: white;
-`;
-
-const PageWrapper = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    background-color: white;
-`;
-
-const FormSection = styled.div`
-    width: 80%;
-    height: 100%;
-    background-color: #5A7D7C;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3% 0 4% 0;
-`;
-
-const StyledForm = styled.form`
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-`;
-
-const SuccessMessage = styled.h2`
-    color: green;
-    text-align: center;
-    margin-bottom: 2%;
-    font-size: calc(2px + 1.6vw);
-`;
-
-const StyledInput = styled.input`
-    width: 100%;
-    padding: 2%;
-    margin-bottom: 7%;
-    border: 1px solid #ccc;
-    outline: none;
-    background-color: white;
-    font-size: calc(2px + 1.4vw);
-    border-radius: 8px;
-    box-sizing: border-box;
-`;
-
-const StyledTextarea = styled.textarea`
-    width: 100%;
-    height: 20%;
-    padding: 2%;
-    margin-bottom: 5%;
-    border: 1px solid #ccc;
-    outline: none;
-    background-color: white;
-    font-size: calc(2px + 1.4vw);
-    border-radius: 8px;
-    resize: vertical;
-    box-sizing: border-box;
-`;
-
-const ButtonWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`;
-
-const StyledButton = styled.button`
-    width: 15%;
-    padding: 1.5% 2%;
-    border: none;
-    border-radius: 8px;
-    background-color: darkgrey;
-    color: white;
-    font-size: calc(2px + 1.4vw);
-    cursor: pointer;
-
-    &:hover {
-        background-color: grey;
-    }
-`;

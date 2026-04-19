@@ -3,7 +3,22 @@
 import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
 import {useState} from "react";
+import {useEffect} from "react";
 
+
+const StyledButton = styled.button`
+    width: 8%;
+    padding: 1%;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-size: calc(2px + .7vw);
+    cursor: pointer;
+
+    &:hover {
+        background-color: lightgrey;
+    }
+`;
 
 const PostViewBg = styled.div`
     background-color: #5A7D7C;
@@ -94,6 +109,12 @@ export default  function PostView({ post }: { post: PostProps }) {
         post.currentUserVote ?? null
     );
 
+    // Using document.title since this is a client component (metadata not supported),
+    // so we google how else to implement the title
+    useEffect(() => {
+        document.title = `Revival | ${post.title}`;
+    }, [post.title]);
+
     async function handleUpvote() {
         const response = await fetch(`/api/posts/${post.id}/upvote`, {
             method: "POST",
@@ -147,14 +168,14 @@ export default  function PostView({ post }: { post: PostProps }) {
             <PostContent>{post.content}</PostContent>
 
             <VoteSection>
-                <button onClick={handleUpvote} disabled={userVote === "up"}>
+                <StyledButton onClick={handleUpvote} disabled={userVote === "up"}>
                     ⬆ Upvote
-                </button>
+                </StyledButton>
                 <VoteText>{upvotes}</VoteText>
 
-                <button onClick={handleDownvote} disabled={userVote === "down"}>
+                <StyledButton onClick={handleDownvote} disabled={userVote === "down"}>
                     ⬇ Downvote
-                </button>
+                </StyledButton>
                 <VoteText>{downvotes}</VoteText>
             </VoteSection>
             <PostTime>{post.createdAt
