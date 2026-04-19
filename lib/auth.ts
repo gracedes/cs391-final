@@ -7,7 +7,7 @@ export const auth = betterAuth({
     user: {
         additionalFields: {
             following: {
-                type: "string[]",
+                type: "string",
                 defaultValue: [],
             },
             username: {

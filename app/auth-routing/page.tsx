@@ -13,6 +13,6 @@ export default async function AuthRouting() {
     if(!currentUser.username || currentUser.username.trim() === ""){
         redirect("/setup-username");
     } else {
-        redirect("/following");
+        redirect("/profile");
     }
 }
