@@ -2,29 +2,23 @@
 
 import getCollection from "@/lib/db";
 import {UserProps} from "@/app/interfaces/UserProps";
-import {useState} from "react";
 
 export default async function getProfile(username:string):Promise<UserProps|null>{
-    const [user, setUser] = useState<UserProps | null>(null);
 
-    const userCollection = await getCollection("users");
-    await userCollection.findOne({username})
-        .then((user) =>
-            {if (user) {
-                setUser(user.toArray() as UserProps)
-            }});
+    const userCollection = await getCollection("user");
+    const userProfile = await userCollection.findOne({username});
 
-    if (!user) {
+    if (!userProfile) {
         console.error("No user found");
         return null
     }
 
     return {
         // TODO: update temp values later
-        username: user.username,
-        name: user.name,
-        bio: (user.bio ? user.bio : "no bio"),
-        image: user.image
+        username: userProfile.username,
+        name: userProfile.name,
+        bio: (userProfile.bio ? userProfile.bio : "no bio"),
+        image: userProfile.image
         //following: null;
         //tags: null;
         //posts: PostProps[];
