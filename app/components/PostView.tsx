@@ -3,8 +3,7 @@
 import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
 import {useState} from "react";
-import getUpvote from "@/lib/getUpvote";
-import getDownvote from "@/lib/getDownvote";
+
 
 const PostViewBg = styled.div`
     background-color: #5A7D7C;
@@ -82,7 +81,7 @@ const VoteText = styled.p`
 `;
 
 
-export default async function PostView({ post }: { post: PostProps }) {
+export default  function PostView({ post }: { post: PostProps }) {
     const [upvotes, setUpvotes] = useState(post.upvotes);
     const [downvotes, setDownvotes] = useState(post.downvotes);
 
