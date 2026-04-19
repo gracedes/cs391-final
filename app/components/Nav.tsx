@@ -29,17 +29,27 @@ const NavBar = styled.nav`
     }
 `;
 
+const Wordmark = styled.h1`
+    font-family: "Syncopate", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: calc(13px + 2vw);
+    width: 8vh;
+    color: white;
+`;
+
 export default function Nav() {
     const { data: session, isPending } = authClient.useSession();
 
     return (
         <NavBar>
+            <Wordmark>Revival</Wordmark>
             <div className="center-links">
                 <Link className="text-link" href="/">Discover</Link>
                 <Link className="text-link" href="/following">Following</Link>
                 <Link className="text-link" href="/map">Map</Link>
             </div>
-            <ProfileDropdown session={session} isPending={isPending} imageSize="8vh"/>
+            <ProfileDropdown session={session} isPending={isPending} imageSize="7vh"/>
         </NavBar>
     );
 };
