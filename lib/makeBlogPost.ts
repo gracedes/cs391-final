@@ -21,6 +21,7 @@ export default async function makeBlogPost(title:string, content:string, tags: s
         return null;
     }
 
+    const { _id, ...safePostData } = p as any;
 
-    return {...p, id: res.insertedId.toHexString()};
+    return {...safePostData, id: res.insertedId.toHexString()};
 }
