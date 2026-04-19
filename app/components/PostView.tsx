@@ -2,6 +2,8 @@
 
 import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
+import {useState} from "react";
+
 
 const PostViewBg = styled.div`
     background-color: #5A7D7C;
@@ -78,8 +80,47 @@ const VoteText = styled.p`
     margin: 0;
 `;
 
-export default function PostView({ post }: { post: PostProps }) {
-    const uniqueTags = Array.from(new Set(post.tags));
+
+export default  function PostView({ post }: { post: PostProps }) {
+    const [upvotes, setUpvotes] = useState(post.upvotes);
+    const [downvotes, setDownvotes] = useState(post.downvotes);
+
+    const [userVote, setUserVote] = useState<"up" | "down" | null>(
+        post.currentUserVote ?? null
+    );
+
+    async function handleUpvote() {
+        const response = await fetch(`/api/posts/${post.id}/upvote`, {
+            method: "POST",
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Upvote failed:", response.status, errorText);
+            return;
+        }
+
+        const updatedPost = await response.json();
+        setUpvotes(updatedPost.upvotes);
+        setDownvotes(updatedPost.downvotes);
+        setUserVote("up");
+    }
+
+    async function handleDownvote() {
+        const response = await fetch(`/api/posts/${post.id}/downvote`, {
+            method: "POST",
+        });
+
+        if (!response.ok) {
+            console.error("Failed to downvote");
+            return;
+        }
+
+        const updatedPost = await response.json();
+        setUpvotes(updatedPost.upvotes);
+        setDownvotes(updatedPost.downvotes);
+        setUserVote("down");
+    }
 
     return (
         <PostViewBg>
@@ -90,7 +131,7 @@ export default function PostView({ post }: { post: PostProps }) {
                 </TitleAndUser>
 
                 <TagsDiv>
-                    {uniqueTags.map((tag) => (
+                    {post.tags.map((tag) => (
                         <PostTag key={tag}>{tag}</PostTag>
                     ))}
                 </TagsDiv>
@@ -101,8 +142,15 @@ export default function PostView({ post }: { post: PostProps }) {
             <PostContent>{post.content}</PostContent>
 
             <VoteSection>
-                <VoteText>⬆ Upvotes: {post.upvotes}</VoteText>
-                <VoteText>⬇ Downvotes: {post.downvotes}</VoteText>
+                <button onClick={handleUpvote} disabled={userVote === "up"}>
+                    ⬆ Upvote
+                </button>
+                <VoteText>{upvotes}</VoteText>
+
+                <button onClick={handleDownvote} disabled={userVote === "down"}>
+                    ⬇ Downvote
+                </button>
+                <VoteText>{downvotes}</VoteText>
             </VoteSection>
         </PostViewBg>
     );
