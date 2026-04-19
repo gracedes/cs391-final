@@ -2,6 +2,137 @@
 import { useState } from "react";
 import styled from "styled-components";
 import makeBlogPost from "@/lib/makeBlogPost";
+import Map, {Marker} from "react-map-gl/maplibre";
+import 'maplibre-gl/dist/maplibre-gl.css';
+
+const osmStyle = {
+    version: 8 as const,
+    sources: {
+        'osm-tiles': {
+            type: 'raster' as const,
+            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '&copy; OpenStreetMap contributors'
+        }
+    },
+    layers: [{ id: 'osm-layer', type: 'raster' as const, source: 'osm-tiles', minzoom: 0, maxzoom: 19 }]
+};
+
+export default function NewPostForm({ username }: { username: string}) {
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [tags, setTags] = useState<string[]>([]);
+    const [tagsInput, setTagsInput] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [showMap, setShowMap] = useState(false);
+    const [markerPos, setMarkerPos] = useState<{lng: number, lat: number} | null>(null);
+
+    const handleMapClick = (e: any) => {
+        setMarkerPos({ lng: e.lngLat.lng, lat: e.lngLat.lat });
+    };
+
+    return (
+        <PageWrapper>
+            <FormSection>
+            <PageTitle>Blog Post Creation</PageTitle>
+            {success && <SuccessMessage>Post created successfully!</SuccessMessage>}
+
+            <StyledForm
+                onSubmit={(e) => {
+                    e.preventDefault();
+
+                    makeBlogPost(
+                        title,
+                        content,
+                        tags,
+                        username,
+                        showMap ? markerPos?.lng : null,
+                        showMap ? markerPos?.lat : null
+                    )
+                        .then((p) => {
+                            if (!p) return;
+
+                            setSuccess(true);
+                            setTitle("");
+                            setContent("");
+                            setTags([]);
+                            setTagsInput("");
+                            setMarkerPos(null);
+                            setShowMap(false);
+
+                            setTimeout(() => setSuccess(false), 3000);
+                        })
+                        .catch((err) => console.error(err));
+                }}
+            >
+                <StyledInput
+                    type="text"
+                    placeholder="Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+
+                <StyledInput
+                    type="text"
+                    placeholder="Tags (space-separated)"
+                    value={tagsInput}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        setTagsInput(value);
+
+                        setTags(
+                            value
+                                .split(" ")
+                                .map((tag) => tag.trim())
+                                .filter((tag) => tag !== "")
+                        );
+                    }}
+                />
+
+                <StyledTextarea
+                    placeholder="Content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                />
+
+                <MapToggleWrapper>
+                    <label style={{ color: 'white', fontSize: '1.2rem', marginBottom: '10px' }}>
+                        <input
+                            type="checkbox"
+                            checked={showMap}
+                            onChange={(e) => setShowMap(e.target.checked)}
+                            style={{ marginRight: '10px' }}
+                        />
+                        Add a location to this post?
+                    </label>
+                </MapToggleWrapper>
+
+                {showMap && (
+                    <MapContainer>
+                        <p style={{ color: 'white', textAlign: 'center', marginBottom: '10px' }}>Click on the map to drop a pin.</p>
+                        <MapWrapper>
+                            <Map
+                                initialViewState={{ longitude: -71.1054, latitude: 42.3505, zoom: 12 }}
+                                mapStyle={osmStyle}
+                                onClick={handleMapClick}
+                                cursor="pointer"
+                            >
+                                {markerPos && (
+                                    <Marker longitude={markerPos.lng} latitude={markerPos.lat} color="red" />
+                                )}
+                            </Map>
+                        </MapWrapper>
+                    </MapContainer>
+                )}
+
+                <ButtonWrapper>
+                    <StyledButton type="submit">Create</StyledButton>
+                </ButtonWrapper>
+            </StyledForm>
+            </FormSection>
+        </PageWrapper>
+    );
+}
 
 const PageTitle = styled.h1`
     margin-top: 2%;
@@ -12,7 +143,7 @@ const PageTitle = styled.h1`
 
 const PageWrapper = styled.div`
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: stretch;
@@ -21,7 +152,7 @@ const PageWrapper = styled.div`
 
 const FormSection = styled.div`
     width: 80%;
-    height: 100%;
+    min-height: 100%;
     background-color: #5A7D7C;
     display: flex;
     flex-direction: column;
@@ -89,83 +220,24 @@ const StyledButton = styled.button`
     }
 `;
 
-export default function NewPostForm() {
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [tags, setTags] = useState<string[]>([]);
-    const [username, setUsername] = useState("");
-    const [tagsInput, setTagsInput] = useState("");
-    const [success, setSuccess] = useState(false);
+const MapToggleWrapper = styled.div`
+    width: 100%;
+    margin-bottom: 3%;
+    display: flex;
+    justify-content: flex-start;
+`;
 
-    return (
-        <PageWrapper>
-            <FormSection>
-            <PageTitle>Blog Post Creation</PageTitle>
-            {success && <SuccessMessage>Post created successfully!</SuccessMessage>}
+const MapContainer = styled.div`
+    width: 100%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+`;
 
-            <StyledForm
-                onSubmit={(e) => {
-                    e.preventDefault();
-
-                    makeBlogPost(title, content, tags, username)
-                        .then((p) => {
-                            if (!p) return;
-
-                            setSuccess(true);
-                            setTitle("");
-                            setContent("");
-                            setTags([]);
-                            setUsername("");
-                            setTagsInput("");
-
-                            setTimeout(() => setSuccess(false), 3000);
-                        })
-                        .catch((err) => console.error(err));
-                }}
-            >
-                <StyledInput
-                    type="text"
-                    placeholder="Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-
-                <StyledInput
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-
-                <StyledInput
-                    type="text"
-                    placeholder="Tags (space-separated)"
-                    value={tagsInput}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        setTagsInput(value);
-
-                        setTags(
-                            value
-                                .split(" ")
-                                .map((tag) => tag.trim())
-                                .filter((tag) => tag !== "")
-                        );
-                    }}
-                />
-
-                <StyledTextarea
-                    placeholder="Content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
-
-                <ButtonWrapper>
-                    <StyledButton type="submit">Create</StyledButton>
-                </ButtonWrapper>
-            </StyledForm>
-            </FormSection>
-        </PageWrapper>
-    );
-}
-
+const MapWrapper = styled.div`
+    height: 300px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+`;
