@@ -9,7 +9,7 @@ const ProfilePageDiv = styled.div`
     height: 90vh;
     
     display: grid;
-    grid-template-columns: 70vw 30vw;
+    grid-template-columns: 60vw 40vw;
 `
 
 export default function ProfilePage() {
