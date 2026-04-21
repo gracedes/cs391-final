@@ -31,7 +31,7 @@ const UserInfoDiv = styled.div`
     h3 {
         grid-column: 1;
         grid-row: 3;
-        padding-bottom: 1vh;
+        padding-bottom: 0.75vh;
         font-style: italic;
     }
     
