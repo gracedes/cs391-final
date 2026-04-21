@@ -18,8 +18,6 @@ const UserInfoDiv = styled.div`
     .pfp {
         grid-column: 1/3;
         grid-row: 1;
-        //height: calc(min(600px, 35vw) - 1vh);
-        //width: calc(min(600px, 35vw) - 1vw);
         position: relative;
     }
     

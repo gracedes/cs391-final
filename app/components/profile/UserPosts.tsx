@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {PostProps} from "@/app/interfaces/PostProps";
 import getProfilePosts from "@/lib/getProfilePosts";
-import PostsDisplay from "@/app/components/PostDisplay";
+import PostsDisplay from "@/app/components/profile/ProfilePostDisplay";
 
 export default function UserPosts({ username }: { username: string }) {
     const [posts, setPosts] = useState<PostProps[] | null>(null);
@@ -20,5 +20,5 @@ export default function UserPosts({ username }: { username: string }) {
         return (<p>User has not made any posts yet!</p>);
     }
 
-    return (<PostsDisplay inputPosts={posts}/>);
+    return (<PostsDisplay inputPosts={posts} />);
 }
