@@ -7,16 +7,30 @@ import {useEffect} from "react";
 
 
 const StyledButton = styled.button`
-    width: 8%;
+    width: 10%;
     padding: 1%;
     border: none;
     border-radius: 8px;
     color: black;
-    font-size: calc(2px + .7vw);
+    font-size: calc(2px + .9vw);
     cursor: pointer;
 
     &:hover {
         background-color: lightgrey;
+    }
+    @media (max-width: 1000px) {
+        width: 16%;
+        padding: 1.6%;
+        margin-bottom: 1.5%;
+        border: none;
+        border-radius: 8px;
+        color: black;
+        font-size: calc(2px + 1.3vw);
+        cursor: pointer;
+
+        &:hover {
+            background-color: lightgrey;
+        }
     }
 `;
 
@@ -92,7 +106,12 @@ const VoteSection = styled.div`
 `;
 
 const VoteText = styled.p`
-    margin: 0;
+    margin-top: .8%;
+    font-size: calc(2px + 1.4vw);
+    @media (max-width: 1000px) {
+        margin-top: 1.6%;
+        font-size: calc(2px + 2vw);
+    }
 `;
 
 const PostTime = styled.p`
@@ -110,7 +129,7 @@ export default function PostView({ post }: { post: PostProps }) {
     );
 
     // Using document.title since this is a client component (metadata not supported),
-    // so we google how else to implement the title
+    // so we googled how else to implement the title
     useEffect(() => {
         document.title = `Revival | ${post.title}`;
     }, [post.title]);
