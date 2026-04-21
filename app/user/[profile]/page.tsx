@@ -1,6 +1,7 @@
 "use client";
 
 import UserInfo from "@/app/components/profile/UserInfo";
+import UserPosts from "@/app/components/profile/UserPosts"
 import styled from "styled-components";
 import { useParams } from "next/navigation";
 
@@ -19,9 +20,7 @@ export default function ProfilePage() {
 
     return (
         <ProfilePageDiv>
-            <div>
-                <p>this is where the posts go</p>
-            </div>
+            <UserPosts username={username} />
             <UserInfo username={username}/>
         </ProfilePageDiv>
     )
