@@ -9,6 +9,7 @@ import styled from "styled-components";
 
 const SortBar = styled.div`
     display: flex;
+    justify-content: flex-end;
     gap: 1rem;
     margin: 1.5rem;
 `;
@@ -34,46 +35,44 @@ export const metadata: Metadata = {
 };
 
 export default async function FollowingPage({searchParams,}: {
-    searchParams: Promise<{ sort?: string }>;
-}){
+    searchParams: Promise<{ sort?: string; tag?: string }>;
+}) {
     const session = await auth.api.getSession({
         headers: await headers()
     });
 
-    if(!session || !session.user){
+    if (!session || !session.user) {
         redirect("/login")
     }
 
     const currentUser = session.user as any;
-    if (!currentUser.username || currentUser.username.trim() === ""){
+    if (!currentUser.username || currentUser.username.trim() === "") {
         redirect("/setup-username");
     }
 
     const params = await searchParams;
     const sortOrder = params.sort === "oldest" ? "oldest" : "newest";
 
-    const followingPosts = await getFollowingPosts(sortOrder);
+    const tag = params.tag;
+    const followingPosts = await getFollowingPosts(sortOrder, tag);
 
-
-    return(
-        <>
+    return (
+        <PostsDisplay inputPosts={followingPosts} activeTag={tag}>
             <SortBar>
                 <SortButton
-                    href="/following?sort=newest"
+                    href={`/following?sort=newest${tag ? `&tag=${encodeURIComponent(tag)}` : ""}`}
                     $active={sortOrder === "newest"}
                 >
                     Newest
                 </SortButton>
 
                 <SortButton
-                    href="/following?sort=oldest"
+                    href={`/following?sort=oldest${tag ? `&tag=${encodeURIComponent(tag)}` : ""}`}
                     $active={sortOrder === "oldest"}
                 >
                     Oldest
                 </SortButton>
             </SortBar>
-
-            <PostsDisplay inputPosts={followingPosts} />
-        </>
+        </PostsDisplay>
     );
 }

@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 const SortBar = styled.div`
     display: flex;
+    justify-content: flex-end;
     gap: 1rem;
     margin: 1.5rem;
 `;
@@ -30,32 +31,31 @@ export const metadata: Metadata = {
     description: "Revival's Discover page",
 };
 
-export default async function Home({searchParams,}: { searchParams: Promise<{ sort?: string }>;
+export default async function Home({searchParams,}: { searchParams: Promise<{ sort?: string; tag?: string }>;
 }) {
     const params = await searchParams;
     const sortOrder = params.sort === "oldest" ? "oldest" : "newest";
+    const tag = params.tag;
 
-    const posts = await getAllPosts(sortOrder);
+    const posts = await getAllPosts(sortOrder, tag);
 
     return (
-        <>
+        <PostsDisplay inputPosts={posts} activeTag={tag}>
             <SortBar>
                 <SortButton
-                    href="/?sort=newest"
+                    href={`/?sort=newest${tag ? `&tag=${encodeURIComponent(tag)}` : ""}`}
                     $active={sortOrder === "newest"}
                 >
                     Newest
                 </SortButton>
 
                 <SortButton
-                    href="/?sort=oldest"
+                    href={`/?sort=oldest${tag ? `&tag=${encodeURIComponent(tag)}` : ""}`}
                     $active={sortOrder === "oldest"}
                 >
                     Oldest
                 </SortButton>
             </SortBar>
-
-            <PostsDisplay inputPosts={posts} />
-        </>
+        </PostsDisplay>
     );
 }

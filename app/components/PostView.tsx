@@ -4,7 +4,7 @@ import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
 import {useState} from "react";
 import {useEffect} from "react";
-
+import Link from "next/link";
 
 const StyledButton = styled.button`
     width: 8%;
@@ -60,13 +60,19 @@ const TagsDiv = styled.div`
     flex-wrap: wrap;
 `;
 
-const PostTag = styled.button`
-    background-color: #D9D9D9;
+const PostTag = styled(Link)<{ $active?: boolean }>`
+    background-color: ${({ $active }) => ($active ? "#FFFFFF" : "#D9D9D9")};
     color: #000000;
-    border: none;
+    border: ${({ $active }) => ($active ? "2px solid #5A7D7C" : "none")};
     border-radius: 4vw;
     padding: 0.3vw 0.8vw;
-    cursor: default;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #cfcfcf;
+    }
 `;
 
 const PostImage = styled.img`
@@ -101,7 +107,10 @@ const PostTime = styled.p`
     color: #EAEAEA;
 `;
 
-export default function PostView({ post }: { post: PostProps }) {
+export default function PostView({post, activeTag,}: {
+    post: PostProps;
+    activeTag?: string;
+}){
     const [upvotes, setUpvotes] = useState(post.upvotes);
     const [downvotes, setDownvotes] = useState(post.downvotes);
 
@@ -109,8 +118,6 @@ export default function PostView({ post }: { post: PostProps }) {
         post.currentUserVote ?? null
     );
 
-    // Using document.title since this is a client component (metadata not supported),
-    // so we google how else to implement the title
     useEffect(() => {
         document.title = `Revival | ${post.title}`;
     }, [post.title]);
@@ -158,7 +165,13 @@ export default function PostView({ post }: { post: PostProps }) {
 
                 <TagsDiv>
                     {post.tags.map((tag) => (
-                        <PostTag key={tag}>{tag}</PostTag>
+                        <PostTag
+                            key={tag}
+                            href={`/?tag=${encodeURIComponent(tag)}`}
+                            $active={activeTag === tag}
+                        >
+                            {tag}
+                        </PostTag>
                     ))}
                 </TagsDiv>
             </PostHeader>
