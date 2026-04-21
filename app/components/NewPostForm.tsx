@@ -21,7 +21,7 @@ const osmStyle = {
 export default function NewPostForm({ username }: { username: string}) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [tags, setTags] = useState<string[]>([]);
+    const [tags, setTags] = useState<Set<string>>(new Set());
     const [tagsInput, setTagsInput] = useState("");
     const [success, setSuccess] = useState(false);
     const [showMap, setShowMap] = useState(false);
@@ -44,7 +44,7 @@ export default function NewPostForm({ username }: { username: string}) {
                     makeBlogPost(
                         title,
                         content,
-                        tags,
+                        Array.from(tags),
                         username,
                         showMap ? markerPos?.lng : null,
                         showMap ? markerPos?.lat : null
@@ -55,7 +55,7 @@ export default function NewPostForm({ username }: { username: string}) {
                             setSuccess(true);
                             setTitle("");
                             setContent("");
-                            setTags([]);
+                            setTags(new Set());
                             setTagsInput("");
                             setMarkerPos(null);
                             setShowMap(false);
@@ -80,12 +80,12 @@ export default function NewPostForm({ username }: { username: string}) {
                         const value = e.target.value;
                         setTagsInput(value);
 
-                        setTags(
-                            value
-                                .split(" ")
-                                .map((tag) => tag.trim())
-                                .filter((tag) => tag !== "")
-                        );
+                        const tagArray = value
+                            .split(" ")
+                            .map((tag) => tag.trim())
+                            .filter((tag) => tag !== "");
+
+                        setTags(new Set(tagArray));
                     }}
                 />
 

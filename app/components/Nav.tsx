@@ -62,13 +62,14 @@ const MapLink = styled(StyledLinks)<{ $page: string }>`
     `}
 `;
 
-const Wordmark = styled.h1`
+const Wordmark = styled(Link)`
     font-family: "Syncopate", sans-serif;
     font-weight: 400;
     font-style: normal;
     font-size: calc(13px + 2vw);
     width: 8vh;
     color: white;
+    text-decoration: none;
 `;
 
 export default function Nav() {
@@ -78,7 +79,7 @@ export default function Nav() {
 
     return (
         <NavBar>
-            <Wordmark>Revival</Wordmark>
+            <Wordmark href="/">Revival</Wordmark>
             <LinksDiv>
                 <DiscoverLink href="/" $page={pathname}>Discover</DiscoverLink>
                 <FollowingLink href="/following" $page={pathname}>Following</FollowingLink>
