@@ -8,8 +8,8 @@ const BackgroundDiv = styled.div`
     background-color: #232C33;
     width: calc(100vw - min(600px, 35vw));
     margin: -1vw auto 0 auto;
-    min-height: 100vh;
-    overflow: hidden;
+    height: calc(90vh + 1vw);
+    overflow: scroll;
 `;
 
 export default function PostsDisplay({inputPosts}: {inputPosts: PostProps[]}) {
