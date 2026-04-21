@@ -45,6 +45,20 @@ const StyledContentPreview = styled.p`
     color: #FFFFFF;
 `;
 
+const VoteSection = styled.div`
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    color: #FFFFFF;
+    font-weight: bold;
+`;
+
+const StyledTime = styled.p`
+    color: #EAEAEA;
+    margin: 0.3vw 0;
+    font-size: 0.9rem;
+`;
+
 export default function PostPreview({post}: { post: PostProps }) {
     const uniqueTags = Array.from(new Set(post.tags));
 
@@ -59,6 +73,15 @@ export default function PostPreview({post}: { post: PostProps }) {
                 </PostPreviewHeader>
                 <StyledUsername>{post.username}</StyledUsername>
                 <StyledContentPreview>{post.content.length > 150 ? `${post.content.substring(0, 150)}...` : post.content}</StyledContentPreview>
+                <VoteSection>
+                    <span>⬆ {post.upvotes}</span>
+                    <span>⬇ {post.downvotes}</span>
+                </VoteSection>
+                <StyledTime>
+                    {post.createdAt
+                        ? new Date(post.createdAt).toLocaleString()
+                        : ""}
+                </StyledTime>
             </PostPreviewBg>
         </StyledLink>
     );
