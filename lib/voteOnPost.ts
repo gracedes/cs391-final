@@ -21,6 +21,7 @@ interface PostDocument {
     longitude?: number;
     latitude?: number;
     votes?: VoteEntry[];
+    createdAt: string;
 }
 
 export default async function voteOnPost(
@@ -39,6 +40,7 @@ export default async function voteOnPost(
 
     const votes = post.votes ?? [];
     const existingVote = votes.find((vote) => vote.userId === userId);
+    const createdAt = new Date();
 
     let newUpvotes = post.upvotes;
     let newDownvotes = post.downvotes;
@@ -92,5 +94,6 @@ export default async function voteOnPost(
         downvotes: newDownvotes,
         longitude: post.longitude,
         latitude: post.latitude,
+        createdAt: createdAt.toISOString()
     };
 }
