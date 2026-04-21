@@ -61,7 +61,6 @@ export default async function FollowingPage({searchParams,}: {
             <SortBar>
                 <SortButton
                     href={`/following?sort=newest${tag ? `&tag=${encodeURIComponent(tag)}` : ""}`}
-                    href="/following?sort=newest"
                     $active={sortOrder === "newest"}
                 >
                     Newest
@@ -69,7 +68,6 @@ export default async function FollowingPage({searchParams,}: {
 
                 <SortButton
                     href={`/following?sort=oldest${tag ? `&tag=${encodeURIComponent(tag)}` : ""}`}
-                    href="/following?sort=oldest"
                     $active={sortOrder === "oldest"}
                 >
                     Oldest
