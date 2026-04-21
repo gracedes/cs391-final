@@ -32,7 +32,7 @@ const StyledLinks = styled(Link)`
     color: white;
     text-decoration: none;
     margin-left: 2vw;
-    font-size: calc(2px + 3vw);
+    font-size: calc(2px + 2.3vw);
     text-align: center;
     padding: 0 1vw;
     width: fit-content;
