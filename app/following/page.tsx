@@ -59,14 +59,14 @@ export default async function FollowingPage({searchParams,}: {
         <>
             <SortBar>
                 <SortButton
-                    href="/?sort=newest"
+                    href="/following?sort=newest"
                     $active={sortOrder === "newest"}
                 >
                     Newest
                 </SortButton>
 
                 <SortButton
-                    href="/?sort=oldest"
+                    href="/following?sort=oldest"
                     $active={sortOrder === "oldest"}
                 >
                     Oldest

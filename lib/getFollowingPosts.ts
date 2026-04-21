@@ -3,7 +3,8 @@ import getCollection, { POSTS_COLLECTION } from "@/lib/db";
 import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 
-export default async function getFollowingPosts(    sortOrder: "newest" | "oldest" = "newest"
+export default async function getFollowingPosts(
+    sortOrder: "newest" | "oldest" = "newest"
 ): Promise<PostProps[]> {
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -16,12 +17,19 @@ export default async function getFollowingPosts(    sortOrder: "newest" | "oldes
 
     const currentUser = session.user as any;
     const followedUsernames: string[] = currentUser.following || [];
+
     if (followedUsernames.length === 0) {
         return [];
     }
 
+    const sortValue = sortOrder === "newest" ? -1 : 1;
+
     const postsCollection = await getCollection(POSTS_COLLECTION);
-    const data = await postsCollection.find({username: { $in: followedUsernames }}).toArray();
+    const data = await postsCollection
+        .find({ username: { $in: followedUsernames } })
+        .sort({ createdAt: sortValue })
+        .toArray();
+
     const posts: PostProps[] = data.map((p) => (
         {
             id: p._id.toHexString(),
@@ -34,8 +42,9 @@ export default async function getFollowingPosts(    sortOrder: "newest" | "oldes
             downvotes: p.downvotes,
             latitude: p.latitude,
             longitude: p.longitude,
+            createdAt: p.createdAt?.toISOString?.() ?? "",
         }
     ));
 
-    return posts.reverse();
+    return posts;
 }
