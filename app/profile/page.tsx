@@ -1,3 +1,3 @@
 export default function ProfilePage() {
-    return (<div>PRofilr test </div>)
+    return (<div>Profile test </div>)
 }
