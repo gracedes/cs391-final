@@ -4,8 +4,7 @@ import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 
 export default async function getFollowingPosts(
-    sortOrder: "newest" | "oldest" = "newest"
-): Promise<PostProps[]> {
+    sortOrder: "newest" | "oldest" = "newest", tag?: string): Promise<PostProps[]> {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -24,9 +23,14 @@ export default async function getFollowingPosts(
 
     const sortValue = sortOrder === "newest" ? -1 : 1;
 
+    const filter = {
+        username: { $in: followedUsernames },
+        ...(tag ? { tags: tag } : {}),
+    };
+
     const postsCollection = await getCollection(POSTS_COLLECTION);
     const data = await postsCollection
-        .find({ username: { $in: followedUsernames } })
+        .find(filter)
         .sort({ createdAt: sortValue })
         .toArray();
 

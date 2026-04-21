@@ -28,12 +28,18 @@ const TagsDiv = styled.div`
     gap: 8px;
 `;
 
-const PostTag = styled.button`
-    background-color: #D9D9D9;
+const PostTag = styled(Link)<{ $active?: boolean }>`
+    background-color: ${({ $active }) => ($active ? "#FFFFFF" : "#D9D9D9")};
     color: #000000;
-    border: none;
+    border: ${({ $active }) => ($active ? "2px solid #5A7D7C" : "none")};
     border-radius: 4vw;
     padding: 0.3vw 0.5vw;
+    text-decoration: none;
+    display: inline-block;
+
+    &:hover {
+        background-color: #cfcfcf;
+    }
 `;
 
 const StyledUsername = styled.p`
@@ -59,30 +65,49 @@ const StyledTime = styled.p`
     font-size: 0.9rem;
 `;
 
-export default function PostPreview({post}: { post: PostProps }) {
+export default function PostPreview({post, activeTag,}: {
+    post: PostProps;
+    activeTag?: string;
+}) {
     const uniqueTags = Array.from(new Set(post.tags));
 
     return (
-        <StyledLink href={`/post/${post.id}`}>
-            <PostPreviewBg>
+        <PostPreviewBg>
+            <StyledLink href={`/post/${post.id}`}>
                 <PostPreviewHeader>
                     <PostTitle>{post.title}</PostTitle>
-                    <TagsDiv>
-                        {uniqueTags.map((tag) => <PostTag key={tag}>{tag}</PostTag>)}
-                    </TagsDiv>
                 </PostPreviewHeader>
+
                 <StyledUsername>{post.username}</StyledUsername>
-                <StyledContentPreview>{post.content.length > 150 ? `${post.content.substring(0, 150)}...` : post.content}</StyledContentPreview>
+                <StyledContentPreview>
+                    {post.content.length > 150
+                        ? `${post.content.substring(0, 150)}...`
+                        : post.content}
+                </StyledContentPreview>
+
                 <VoteSection>
                     <span>⬆ {post.upvotes}</span>
                     <span>⬇ {post.downvotes}</span>
                 </VoteSection>
+
                 <StyledTime>
                     {post.createdAt
                         ? new Date(post.createdAt).toLocaleString()
                         : ""}
                 </StyledTime>
-            </PostPreviewBg>
-        </StyledLink>
+            </StyledLink>
+
+            <TagsDiv>
+                {uniqueTags.map((tag) => (
+                    <PostTag
+                        key={tag}
+                        href={`/?tag=${encodeURIComponent(tag)}`}
+                        $active={activeTag === tag}
+                    >
+                        {tag}
+                    </PostTag>
+                ))}
+            </TagsDiv>
+        </PostPreviewBg>
     );
 }

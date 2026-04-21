@@ -4,13 +4,17 @@ import getCollection, {POSTS_COLLECTION} from "@/lib/db";
 
 type SortOrder = "newest" | "oldest";
 
-export default async function getAllPosts(sortOrder: SortOrder = "newest"):Promise<PostProps[]>{
+export default async function getAllPosts(
+    sortOrder: SortOrder = "newest",
+    tag?: string
+): Promise<PostProps[]> {
     const sortValue = sortOrder === "newest" ? -1 : 1;
+    const filter = tag ? { tags: tag } : {};
 
     const postsCollection=await getCollection(POSTS_COLLECTION);
 
     const data=await postsCollection
-        .find()
+        .find(filter)
         .sort({ createdAt: sortValue })
         .toArray();
 
