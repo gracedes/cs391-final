@@ -5,6 +5,28 @@ import {headers} from "next/headers";
 import {redirect} from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
+import styled from "styled-components";
+
+const SortBar = styled.div`
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem;
+`;
+
+const SortButton = styled(Link)<{ $active?: boolean }>`
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+
+    background-color: ${({ $active }) => ($active ? "#D9D9D9" : "#5A7D7C")};
+    color: ${({ $active }) => ($active ? "#000" : "#FFF")};
+
+    &:hover {
+        opacity: 0.8;
+    }
+`;
 
 export const metadata: Metadata = {
     title: "Revival | Following",
@@ -35,11 +57,21 @@ export default async function FollowingPage({searchParams,}: {
 
     return(
         <>
-            <div style={{ margin: "1rem" }}>
-                <Link href="/following?sort=newest">Newest to Oldest</Link>
-                {" | "}
-                <Link href="/following?sort=oldest">Oldest to Newest</Link>
-            </div>
+            <SortBar>
+                <SortButton
+                    href="/?sort=newest"
+                    $active={sortOrder === "newest"}
+                >
+                    Newest
+                </SortButton>
+
+                <SortButton
+                    href="/?sort=oldest"
+                    $active={sortOrder === "oldest"}
+                >
+                    Oldest
+                </SortButton>
+            </SortBar>
 
             <PostsDisplay inputPosts={followingPosts} />
         </>
