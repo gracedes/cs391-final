@@ -86,7 +86,7 @@ const PostContent = styled.p`
 const VoteSection = styled.div`
     display: flex;
     gap: 1.5rem;
-    margin-top: 2vw;
+    margin: .5vw 0;
     font-size: 1rem;
     font-weight: bold;
 `;
@@ -96,7 +96,7 @@ const VoteText = styled.p`
 `;
 
 const PostTime = styled.p`
-    margin: 0.5vw 0;
+    margin-top: 1vw;
     font-size: 0.95rem;
     color: #EAEAEA;
 `;
