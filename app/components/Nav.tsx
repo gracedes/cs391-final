@@ -18,11 +18,6 @@ const NavBar = styled.nav`
     box-sizing: border-box;
     padding: 0 4vw;
     font-size: calc(14px + 0.75vw);
-    .text-link {
-        text-decoration: none;
-        color: white;
-        margin: 0 4vw;
-    }
     .center-links {
         margin: 0 auto;
         width: fit-content;
