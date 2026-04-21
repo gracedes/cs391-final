@@ -9,7 +9,7 @@ const ProfilePageDiv = styled.div`
     height: 90vh;
     
     display: grid;
-    grid-template-columns: 60vw 40vw;
+    grid-template-columns: auto min(600px, 35vw);
 `
 
 export default function ProfilePage() {
@@ -20,7 +20,7 @@ export default function ProfilePage() {
     return (
         <ProfilePageDiv>
             <div>
-                this is where the posts go
+                <p>this is where the posts go</p>
             </div>
             <UserInfo username={username}/>
         </ProfilePageDiv>
