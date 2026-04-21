@@ -8,15 +8,18 @@ import styled from "styled-components";
 
 const UserInfoDiv = styled.div`
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: min(600px, 35vw) 1fr 1fr 1fr;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: calc(min(600px, 35vw) - 2 * max(2vh, 2vw)) fit-content(3vh) fit-content(2vh) fit-content(5vh);
     background-color: #5A7D7C;
+    padding: max(2vh, 2vw) max(2vh, 2vw);
+    grid-row-gap: 0.5vh;
+    color: white;
     
     .pfp {
-        grid-column: 1/2;
+        grid-column: 1/3;
         grid-row: 1;
-        height: min(600px, 35vw);
-        width: min(600px, 35vw);
+        //height: calc(min(600px, 35vw) - 1vh);
+        //width: calc(min(600px, 35vw) - 1vw);
         position: relative;
     }
     
@@ -28,10 +31,12 @@ const UserInfoDiv = styled.div`
     h3 {
         grid-column: 1;
         grid-row: 3;
+        padding-bottom: 1vh;
+        font-style: italic;
     }
     
     p {
-        grid-column: 1/2;
+        grid-column: 1/3;
         grid-row: 4;
     }
 `;
@@ -60,7 +65,7 @@ export default function UserInfo({ username }: { username: string }) {
             </div>
             <h1>{profile.name}</h1>
             <h3>{profile.username}</h3>
-            <p>bio</p>
+            <p>bio goes here this is the bio biography yeah yeah bio yeah this is a bio omg so cool is that a bio yes it is!</p>
         </UserInfoDiv>
     )
 }
