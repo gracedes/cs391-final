@@ -12,13 +12,19 @@ const PageWrapper = styled.div`
     width: 80vw;
     height: 100vh;
     margin: 0 auto;
-    align-items: center;
-    background-color: #5A7D7C;
     padding: 2%;
-    display: flex;              
+    background-color: #5A7D7C;
+
+    display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     text-align: center;
+
+    @media (max-width: 800px) {
+        width: 80vw;
+        margin: 0 auto;
+        padding: 4%;
+    }
 `;
 
 
@@ -27,12 +33,22 @@ const PageHeader = styled.h1`
   font-size: calc(2px + 2.2vw);
   color: white;
   font-weight: bold;
+    @media (max-width: 800px) {
+        margin-bottom: 3.5%;
+        font-size: calc(2px + 2.4vw);
+        color: white;
+    }
 `;
 
 const PageDescription = styled.p`
   margin-bottom: 2%;
   font-size: calc(2px + 1.5vw);
   color: white;
+    @media (max-width: 800px) {
+        margin-bottom: 3.5%;
+        font-size: calc(2px + 1.7vw);
+        color: white;
+    }
 `;
 
 export default async function MapPage() {

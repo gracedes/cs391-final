@@ -4,7 +4,8 @@ import Link from "next/link";
 import SignOutButton from "@/app/components/auth/SignOutButton";
 import LoginButton from "@/app/components/auth/LoginInButton";
 import {ProfileDropdownProps} from "@/app/interfaces/ProfileDropdownProps";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
+import {usePathname} from "next/navigation";
 
 const DropdownContainer = styled.div`
     position: relative;
@@ -26,11 +27,14 @@ const ProfileButton = styled.button`
     }
 `;
 
-const PfpImage = styled(Image)<{ $size: number | string}>`
+const PfpImage = styled(Image)<{ $size: number | string, $page: string}>`
     border-radius: 50%;
     object-fit: cover;
     width: ${({ $size }) => (typeof $size === "number" ? `${$size}px` : $size)};
     height: ${({ $size }) => (typeof $size === "number" ? `${$size}px` : $size)};
+    ${props => props.$page === '/profile' && css`
+        border: 4px solid white;
+    `}
 `;
 
 const DropDownDiv = styled.div<{ $width: string }>`
@@ -73,6 +77,7 @@ const DropDownDiv = styled.div<{ $width: string }>`
 export default function ProfileDropdown({ session, isPending, imageSrc = "/temp-pfp.jpg", imageSize = 40, dropdownWidth = "180px"}: ProfileDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname();
     function toggleMenu() {
         setIsOpen((prev) => !prev);
     }
@@ -94,7 +99,7 @@ export default function ProfileDropdown({ session, isPending, imageSrc = "/temp-
     return (
         <DropdownContainer ref={dropdownRef}>
             <ProfileButton onClick={toggleMenu}>
-                <PfpImage src={imageSrc} alt={"your profile picture"} width={numericImageSize} height={numericImageSize} $size={imageSize} />
+                <PfpImage src={imageSrc} alt={"your profile picture"} width={numericImageSize} height={numericImageSize} $size={imageSize} $page={pathname}/>
             </ProfileButton>
 
             {isOpen && (
