@@ -68,6 +68,12 @@ const Username = styled.p`
     color: #EAEAEA;
 `;
 
+const UsernameLink = styled(Link)`
+    margin: 0.5vw 0 0 0;
+    font-size: 1rem;
+    color: #EAEAEA;
+`;
+
 const TagsDiv = styled.div`
     display: flex;
     gap: 8px;
@@ -179,7 +185,7 @@ export default function PostView({post, activeTag,}: {
             <PostHeader>
                 <TitleAndUser>
                     <PostTitle>{post.title}</PostTitle>
-                    <Username>By {post.username}</Username>
+                    <Username>By <UsernameLink href={"/user/" + post.username}>{post.username}</UsernameLink></Username>
                 </TitleAndUser>
 
                 <TagsDiv>
