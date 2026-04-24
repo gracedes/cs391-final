@@ -6,6 +6,13 @@ import {UserProps} from "@/app/interfaces/UserProps";
 import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
+import FollowButton from "@/app/components/profile/FollowButton";
+
+const FollowButtonWrapper = styled.div`
+    grid-column: 1 / 3;
+    grid-row: 5;
+    margin-top: 1rem;
+`;
 
 const UserInfoDiv = styled.div`
     display: grid;
@@ -35,23 +42,6 @@ const UserInfoDiv = styled.div`
         padding-bottom: 0.75vh;
         font-style: italic;
         font-size: calc(7px + 1.25vw);
-    }
-    
-    button {
-        grid-column: 2;
-        grid-row: 2/4;
-        background-color: #232C33;
-        height: 4vh;
-        width: 4vh;
-        padding-right: 0;
-        color: white;
-        font-size: calc(12px + 1.5vw);
-        border-style: none;
-        transition-duration: 0.25s;
-        transition-property: background-color;
-        &:hover {
-            background-color: #1f282e;
-        }
     }
     
     .newPost {
@@ -86,7 +76,15 @@ const UserInfoDiv = styled.div`
     }
 `;
 
-export default function UserInfo({ username }: { username: string }) {
+export default function UserInfo({
+                                     username,
+                                     currentUsername,
+                                     initiallyFollowing,
+                                 }: {
+    username: string;
+    currentUsername?: string;
+    initiallyFollowing?: boolean;
+}) {
     const [profile, setProfile] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -106,12 +104,24 @@ export default function UserInfo({ username }: { username: string }) {
     return (
         <UserInfoDiv>
             <div className="pfp">
-                <Image src={profile.image} fill={true} alt={"user's profile picture"}/>
+                <Image src={profile.image} fill={true} alt={"users's profile picture"}/>
             </div>
             <h1>{profile.name}</h1>
             <h3>{"@" + profile.username}</h3>
+            {currentUsername && currentUsername !== profile.username && (
+                <FollowButtonWrapper>
+                    <FollowButton
+                        profileUsername={profile.username}
+                        initiallyFollowing={initiallyFollowing ?? false}
+                    />
+                </FollowButtonWrapper>
+            )}
             <p>{profile.bio}</p>
-            <Link href={"/blog-post-creation-page"} className={"newPost"}>New Post</Link>
+            {currentUsername === profile.username && (
+                <Link href="/blog-post-creation-page" className="newPost">
+                    New Post
+                </Link>
+            )}
         </UserInfoDiv>
     )
 }

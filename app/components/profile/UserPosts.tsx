@@ -1,3 +1,5 @@
+"use client";
+
 import {useEffect, useState} from "react";
 import {PostProps} from "@/app/interfaces/PostProps";
 import getProfilePosts from "@/lib/getProfilePosts";
