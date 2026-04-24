@@ -7,4 +7,8 @@ export interface PostProps {
     image?: string;
     upvotes: number;
     downvotes: number;
+    currentUserVote?: "up" | "down" | null;
+    longitude?: number;
+    latitude?: number;
+    createdAt: string;
 }

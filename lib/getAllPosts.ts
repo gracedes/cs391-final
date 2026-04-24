@@ -2,10 +2,21 @@
 import {PostProps} from "@/app/interfaces/PostProps";
 import getCollection, {POSTS_COLLECTION} from "@/lib/db";
 
-export default async function getAllPosts():Promise<PostProps[]>{
+type SortOrder = "newest" | "oldest";
+
+export default async function getAllPosts(
+    sortOrder: SortOrder = "newest",
+    tag?: string
+): Promise<PostProps[]> {
+    const sortValue = sortOrder === "newest" ? -1 : 1;
+    const filter = tag ? { tags: tag } : {};
 
     const postsCollection=await getCollection(POSTS_COLLECTION);
-    const data=await postsCollection.find().toArray();
+
+    const data=await postsCollection
+        .find(filter)
+        .sort({ createdAt: sortValue })
+        .toArray();
 
     const posts:PostProps[]=data.map((p)=>
         (
@@ -18,9 +29,12 @@ export default async function getAllPosts():Promise<PostProps[]>{
                 image: p.image,
                 upvotes:p.upvotes,
                 downvotes:p.downvotes,
+                latitude: p.latitude,
+                longitude: p.longitude,
+                createdAt: p.createdAt?.toISOString?.() ?? "",
             }
         )
     )
 
-    return posts.reverse();
+    return posts;
 }
