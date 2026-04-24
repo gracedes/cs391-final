@@ -4,6 +4,7 @@ import UserInfo from "@/app/components/profile/UserInfo";
 import UserPosts from "@/app/components/profile/UserPosts"
 import styled from "styled-components";
 import { useParams } from "next/navigation";
+import {useEffect} from "react";
 
 const ProfilePageDiv = styled.div`
     width: 100vw;
@@ -16,7 +17,10 @@ const ProfilePageDiv = styled.div`
 export default function ProfilePage() {
     const params = useParams();
     const username = params.profile as string;
-    console.log("username: ", username);
+
+    useEffect(() => {
+        document.title = `Revival | ${username}`;
+    }, [username]);
 
     return (
         <ProfilePageDiv>
