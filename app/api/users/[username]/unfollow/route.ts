@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import getCollection, { POSTS_COLLECTION } from "@/lib/db";
+import getCollection, { USERS_COLLECTION } from "@/lib/db";
 
 export async function POST(
     request: Request,
     context: { params: Promise<{ username: string }> }
 ) {
     const session = await auth.api.getSession({
-        headers: await headers(),
+        headers: request.headers,
     });
 
     if (!session || !session.user) {
@@ -17,10 +17,10 @@ export async function POST(
 
     const { username } = await context.params;
 
-    const usersCollection = await getCollection(POSTS_COLLECTION);
+    const usersCollection = await getCollection(USERS_COLLECTION);
 
     await usersCollection.updateOne(
-        { id: session.user.id },
+        { username: session.user.username },
         { $pull: { following: username } as any }
     );
 

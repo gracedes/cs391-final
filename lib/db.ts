@@ -9,6 +9,7 @@ if(!MONGO_URI){
 const DB_NAME = "cs391-final";
 
 export const POSTS_COLLECTION = "posts-collection";
+export const USERS_COLLECTION = "user";
 
 let client: MongoClient;
 
@@ -30,4 +31,5 @@ export const mongoDb = client.db(DB_NAME);
 export default async function getCollection(collectionName: string): Promise<Collection> {
     await client.connect();
     return client.db(DB_NAME).collection(collectionName);
+
 }

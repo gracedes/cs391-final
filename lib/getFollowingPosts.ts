@@ -1,5 +1,5 @@
 import { PostProps } from "@/app/interfaces/PostProps";
-import getCollection, { POSTS_COLLECTION } from "@/lib/db";
+import getCollection, { POSTS_COLLECTION, USERS_COLLECTION } from "@/lib/db";
 import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 
@@ -14,8 +14,13 @@ export default async function getFollowingPosts(
         return [];
     }
 
-    const currentUser = session.user as any;
-    const followedUsernames: string[] = currentUser.following || [];
+    const usersCollection = await getCollection(USERS_COLLECTION);
+
+    const currentUserDoc = await usersCollection.findOne({
+        username: (session.user as any).username,
+    });
+
+    const followedUsernames: string[] = currentUserDoc?.following || [];
 
     if (followedUsernames.length === 0) {
         return [];
