@@ -10,7 +10,10 @@ const nextConfig: NextConfig = {
                 pathname: '/a/**'
             }
         ]
-    }
+    },
+    compiler: {
+        styledComponents: true,
+    },
 };
 
 export default nextConfig;
