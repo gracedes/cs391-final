@@ -74,7 +74,7 @@ const DropDownDiv = styled.div<{ $width: string }>`
 `;
 
 
-export default function ProfileDropdown({ session, isPending, imageSrc = "/temp-pfp.jpg", imageSize = 40, dropdownWidth = "180px"}: ProfileDropdownProps) {
+export default function ProfileDropdown({ session, isPending, imageSrc, imageSize = 40, dropdownWidth = "180px"}: ProfileDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
@@ -108,7 +108,7 @@ export default function ProfileDropdown({ session, isPending, imageSrc = "/temp-
                         <div>Loading...</div>
                     ) : session ? (
                         <>
-                            <Link href="/profile" onClick={() => setIsOpen(false)}>
+                            <Link href={"/user/" + session.user.username.trim()} onClick={() => setIsOpen(false)}>
                                 View Profile
                             </Link>
                             <SignOutButton/>
