@@ -47,6 +47,11 @@ const UserInfoDiv = styled.div`
         color: white;
         font-size: calc(12px + 1.5vw);
         border-style: none;
+        transition-duration: 0.25s;
+        transition-property: background-color;
+        &:hover {
+            background-color: #1f282e;
+        }
     }
     
     .newPost {
@@ -62,6 +67,11 @@ const UserInfoDiv = styled.div`
         text-decoration: none;
         font-style: italic;
         display: block;
+        transition-duration: 0.25s;
+        transition-property: background-color;
+        &:hover {
+            background-color: #1f282e;
+        }
     }
     
     p {
@@ -98,10 +108,9 @@ export default function UserInfo({ username }: { username: string }) {
                 <Image src={profile.image} fill={true} alt={"user's profile picture"}/>
             </div>
             <h1>{profile.name}</h1>
-            <button>hi</button>
+            <button></button>
             <h3>{"@" + profile.username}</h3>
             <p>bio goes here this is the bio biography yeah yeah bio yeah this is a bio omg so cool is that a bio yes it is!</p>
-            <h2>tags</h2>
             <Link href={"/blog-post-creation-page"} className={"newPost"}>New Post</Link>
         </UserInfoDiv>
     )
