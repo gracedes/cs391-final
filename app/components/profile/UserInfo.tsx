@@ -78,6 +78,7 @@ const UserInfoDiv = styled.div`
         grid-column: 1/3;
         grid-row: 4;
         overflow: scroll;
+        font-size: calc(5px + 1.25vw);
     }
     
     h2 {
@@ -108,9 +109,8 @@ export default function UserInfo({ username }: { username: string }) {
                 <Image src={profile.image} fill={true} alt={"user's profile picture"}/>
             </div>
             <h1>{profile.name}</h1>
-            <button></button>
             <h3>{"@" + profile.username}</h3>
-            <p>bio goes here this is the bio biography yeah yeah bio yeah this is a bio omg so cool is that a bio yes it is!</p>
+            <p>{profile.bio}</p>
             <Link href={"/blog-post-creation-page"} className={"newPost"}>New Post</Link>
         </UserInfoDiv>
     )
