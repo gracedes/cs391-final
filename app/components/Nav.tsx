@@ -5,8 +5,8 @@ import Link from "next/link";
 import {authClient} from "@/lib/auth-client";
 import ProfileDropdown from "@/app/components/ProfileDropdown";
 import {usePathname} from "next/navigation";
-
-// TODO: add new post button?
+import getProfile from "@/lib/getProfile";
+import {useEffect, useState} from "react";
 
 const NavBar = styled.nav`
     display: flex;
@@ -75,6 +75,18 @@ const Wordmark = styled(Link)`
 export default function Nav() {
     const { data: session, isPending } = authClient.useSession();
 
+    const [profilePicture, setProfilePicture] = useState("/temp-pfp.png");
+
+    useEffect(() => {
+        if (session) {
+            getProfile(session.user.username).then((data) => {
+                if (data) {
+                    setProfilePicture(data.image);
+                }
+            });
+        }}, [session]);
+
+
     const pathname = usePathname()
 
     return (
@@ -85,7 +97,7 @@ export default function Nav() {
                 <FollowingLink href="/following" $page={pathname}>Following</FollowingLink>
                 <MapLink href="/map" $page={pathname}>Map</MapLink>
             </LinksDiv>
-            <ProfileDropdown session={session} isPending={isPending} imageSize="7vh"/>
+            <ProfileDropdown session={session} isPending={isPending} imageSrc={profilePicture} imageSize="7vh"/>
         </NavBar>
     );
 };
