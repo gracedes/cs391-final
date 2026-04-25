@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import styled from "styled-components";
+import unfollowUser from "@/lib/unfollowUser";
+import followUser from "@/lib/followUser";
 
 const Button = styled.button`
     width: 100%;
@@ -20,29 +22,20 @@ const Button = styled.button`
     }
 `;
 
-export default function FollowButton({
-                                         profileUsername,
-                                         initiallyFollowing,
-                                     }: {
-    profileUsername: string;
-    initiallyFollowing: boolean;
-}) {
+export default function FollowButton({profileUsername, initiallyFollowing}: { profileUsername: string; initiallyFollowing: boolean; }) {
     const [following, setFollowing] = useState(initiallyFollowing);
 
     async function handleClick() {
-        const route = following ? "unfollow" : "follow";
+        const action = following ? unfollowUser : followUser;
 
-        const response = await fetch(`/api/users/${profileUsername}/${route}`, {
-            method: "POST",
-        });
+        const result = await action(profileUsername);
 
-        if (!response.ok) {
-            console.error("Failed to update follow status");
+        if ('error' in result) {
+            console.error("Failed to update follow status:", result.error);
             return;
         }
 
-        const data = await response.json();
-        setFollowing(data.following);
+        setFollowing(result.following);
     }
 
     return (
