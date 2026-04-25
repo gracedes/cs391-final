@@ -9,7 +9,7 @@ export default async function getProfile(username:string):Promise<UserProps|null
     const userProfile = await userCollection.findOne({username});
 
     if (!userProfile) {
-        console.error("No user found");
+        console.error("No users found");
         return null
     }
 

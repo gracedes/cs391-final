@@ -5,6 +5,8 @@ import styled from "styled-components";
 import {useState} from "react";
 import {useEffect} from "react";
 import Link from "next/link";
+import upvotePost from "@/lib/upvotePost";
+import downvotePost from "@/lib/downvotePost";
 
 const StyledButton = styled.button`
     width: 10%;
@@ -148,35 +150,28 @@ export default function PostView({post, activeTag,}: {
     }, [post.title]);
 
     async function handleUpvote() {
-        const response = await fetch(`/api/posts/${post.id}/upvote`, {
-            method: "POST",
-        });
+        const result = await upvotePost(post.id);
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error("Upvote failed:", response.status, errorText);
+        if ('error' in result) {
+            console.error("Upvote failed:", result.error);
             return;
         }
 
-        const updatedPost = await response.json();
-        setUpvotes(updatedPost.upvotes);
-        setDownvotes(updatedPost.downvotes);
+        setUpvotes(result.upvotes);
+        setDownvotes(result.downvotes);
         setUserVote("up");
     }
 
     async function handleDownvote() {
-        const response = await fetch(`/api/posts/${post.id}/downvote`, {
-            method: "POST",
-        });
+        const result = await downvotePost(post.id);
 
-        if (!response.ok) {
-            console.error("Failed to downvote");
+        if ('error' in result) {
+            console.error("Failed to downvote:", result.error);
             return;
         }
 
-        const updatedPost = await response.json();
-        setUpvotes(updatedPost.upvotes);
-        setDownvotes(updatedPost.downvotes);
+        setUpvotes(result.upvotes);
+        setDownvotes(result.downvotes);
         setUserVote("down");
     }
 

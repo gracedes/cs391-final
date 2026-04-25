@@ -1,0 +1,1 @@
+export type FollowResponse = { following: boolean } | { error: string; status: number };
