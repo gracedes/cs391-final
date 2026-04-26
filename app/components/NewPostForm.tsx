@@ -167,10 +167,17 @@ const StyledForm = styled.form`
 `;
 
 const SuccessMessage = styled.h2`
-    color: white;
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    width: 60%;
+    padding: 1.5% 2%;
+    border-radius: 8px;
     text-align: center;
-    margin-bottom: 2%;
-    font-size: calc(2px + 1.6vw);
+    margin-bottom: 3%;
+    font-size: calc(2px + 1.4vw);
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const StyledInput = styled.input`
