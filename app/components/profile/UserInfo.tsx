@@ -29,7 +29,7 @@ const UserInfoDiv = styled.div`
         grid-row: 1;
         position: relative;
 
-        width: 50%;
+        width: 80%;
         aspect-ratio: 1 / 1;
 
         justify-self: center;
