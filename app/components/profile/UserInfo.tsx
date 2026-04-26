@@ -16,61 +16,83 @@ const FollowButtonWrapper = styled.div`
 
 const UserInfoDiv = styled.div`
     display: grid;
-    grid-template-columns: 1fr 4vh;
-    grid-template-rows: calc(min(600px, 35vw) - 2 * max(2vh, 2vw)) fit-content(3vh) fit-content(2vh) fit-content(50vh) auto 5vh;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto 1fr auto auto;
     background-color: #5A7D7C;
-    padding: max(2vh, 2vw) max(2vh, 2vw);
-    grid-row-gap: 0.5vh;
+    padding: max(2vh, 2vw);
+    grid-row-gap: 0;
     color: white;
     overflow: hidden;
-    
+
     .pfp {
-        grid-column: 1/3;
+        grid-column: 1;
         grid-row: 1;
         position: relative;
+
+        width: 80%;
+        aspect-ratio: 1 / 1;
+
+        justify-self: center;
+        margin-bottom: 2vh;
     }
-    
+
+    .pfp img {
+        object-fit: cover;
+    }
+
     h1 {
         grid-column: 1;
         grid-row: 2;
-        font-size: calc(12px + 1.5vw);
+        font-size: clamp(22px, 3vw, 40px);
+        margin: 0;
+        line-height: 1;
     }
-    
+
     h3 {
         grid-column: 1;
         grid-row: 3;
         padding-bottom: 0.75vh;
         font-style: italic;
-        font-size: calc(7px + 1.25vw);
+        font-size: clamp(14px, 2vw, 28px);
+        margin: 0;
+        line-height: 1.1;
     }
-    
+
     .newPost {
-        grid-column: 1/3;
-        grid-row: 6;
+        grid-row: auto;
+        margin-top: 1vh;
         background-color: #232C33;
         line-height: 5vh;
-        width: 1fr;
-        color: white;
-        font-size: calc(12px + 1.5vw);
-        border-style: none;
         text-align: center;
+
+        width: 95%;
+        justify-self: center;
+
+        color: white;
+        font-size: clamp(16px, 2vw, 30px);
+        border-style: none;
         text-decoration: none;
         font-style: italic;
         display: block;
         transition-duration: 0.25s;
         transition-property: background-color;
+
+        white-space: nowrap;
+        overflow: hidden;
+
         &:hover {
             background-color: #1f282e;
         }
     }
-    
+
     p {
-        grid-column: 1/3;
+        grid-column: 1;
         grid-row: 4;
         overflow: scroll;
-        font-size: calc(5px + 1.25vw);
+        font-size: clamp(12px, 1.5vw, 22px);
+        margin: 1vh 0 0 0;
     }
-    
+
     h2 {
         grid-row: 5;
     }

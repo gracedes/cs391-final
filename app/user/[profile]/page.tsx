@@ -11,7 +11,10 @@ const ProfilePageDiv = styled.div`
     height: 90vh;
     
     display: grid;
-    grid-template-columns: auto min(600px, 35vw);
+
+    grid-template-columns: 1fr min(450px, 23vw);
+    gap: 0;
+    background-color: #232C33;
 `
 
 export default async function ProfilePage({
