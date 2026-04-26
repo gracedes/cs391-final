@@ -167,7 +167,7 @@ const StyledForm = styled.form`
 `;
 
 const SuccessMessage = styled.h2`
-    color: green;
+    color: white;
     text-align: center;
     margin-bottom: 2%;
     font-size: calc(2px + 1.6vw);
