@@ -7,6 +7,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
 import FollowButton from "@/app/components/profile/FollowButton";
+import updateProfile from "@/lib/updateProfile";
 
 const FollowButtonWrapper = styled.div`
     grid-column: 1 / 3;
@@ -46,6 +47,15 @@ const UserInfoDiv = styled.div`
         font-size: clamp(22px, 3vw, 40px);
         margin: 0;
         line-height: 1;
+    }
+    
+    .nameInput {
+        grid-column: 1;
+        grid-row: 2;
+        height: fit-content;
+        width: 100%;
+        font-size: clamp(20px, 3vw, 40px);
+        margin-bottom: 0.25vh;
     }
 
     h3 {
@@ -92,6 +102,17 @@ const UserInfoDiv = styled.div`
         font-size: clamp(12px, 1.5vw, 22px);
         margin: 1vh 0 0 0;
     }
+    
+    .bioInput {
+        grid-column: 1;
+        grid-row: 4;
+        height: 40%;
+        width: 100%;
+        resize: none;
+        font-size: clamp(12px, 1.5vw, 22px);
+        margin-bottom: 1vh;
+        padding-bottom: 1vh;
+    }
 
     h2 {
         grid-row: 5;
@@ -109,13 +130,27 @@ export default function UserInfo({
 }) {
     const [profile, setProfile] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
+    const [editing, setEditing] = useState(false);
+    const [name, setName] = useState("");
+    const [bio, setBio] = useState<string | undefined>("");
 
     useEffect(() => {
         getProfile(username).then((data) => {
             setProfile(data);
             setLoading(false);
+            if (data) {
+                setName(data.name);
+                setBio(data.bio);
+            }
         });
     }, [username]);
+
+    const sendProfileUpdate = () => {
+        if (profile) {
+            updateProfile(profile.username, name, (bio !== undefined ? bio : ""));
+        }
+        setEditing(false);
+    }
 
     if (loading) return (<UserInfoDiv><p>Loading...</p></UserInfoDiv>);
 
@@ -128,7 +163,9 @@ export default function UserInfo({
             <div className="pfp">
                 <Image src={profile.image} fill={true} alt={"users's profile picture"}/>
             </div>
-            <h1>{profile.name}</h1>
+            {!editing ?
+                (<h1>{name}</h1>) :
+                (<input className={"nameInput"} value={name} aria-label={"name"} onChange={(e) => (setName(String(e.target.value)))}/>)}
             <h3>{"@" + profile.username}</h3>
             {currentUsername && currentUsername !== profile.username && (
                 <FollowButtonWrapper>
@@ -138,7 +175,12 @@ export default function UserInfo({
                     />
                 </FollowButtonWrapper>
             )}
-            <p>{profile.bio}</p>
+            {!editing ?
+                (<p>{bio}</p>) :
+                (<textarea className={"bioInput"} value={bio} aria-label={"bio"} onChange={(e) => (setBio(String(e.target.value)))}/>)}
+            {currentUsername === profile.username ? (!editing ?
+                (<button onClick={() => setEditing(true)} className={"newPost"}>Edit Profile</button>) :
+                (<button onClick={sendProfileUpdate} className={"newPost"}>Submit Changes</button>)) : <></>}
             {currentUsername === profile.username && (
                 <Link href="/blog-post-creation-page" className="newPost">
                     New Post
