@@ -48,6 +48,12 @@ const UserInfoDiv = styled.div`
         margin: 0;
         line-height: 1;
     }
+    
+    .nameInput {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
+    }
 
     h3 {
         grid-column: 1;
@@ -110,9 +116,9 @@ export default function UserInfo({
 }) {
     const [profile, setProfile] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
-    //const [editing, setEditing] = useState(false);
-    //const [bio, setBio] = useState<string | undefined>("");
-    //const [name, setName] = useState("");
+    const [editing, setEditing] = useState(false);
+    const [name, setName] = useState("");
+    const [bio, setBio] = useState<string | undefined>("");
 
     useEffect(() => {
         getProfile(username).then((data) => {
@@ -128,8 +134,9 @@ export default function UserInfo({
 
     const sendProfileUpdate = () => {
         if (profile) {
-            updateProfile(profile.username, profile.name, (profile.bio !== undefined ? profile.bio : ""));
+            updateProfile(profile.username, name, (bio !== undefined ? bio : ""));
         }
+        setEditing(false);
     }
 
     if (loading) return (<UserInfoDiv><p>Loading...</p></UserInfoDiv>);
@@ -143,7 +150,9 @@ export default function UserInfo({
             <div className="pfp">
                 <Image src={profile.image} fill={true} alt={"users's profile picture"}/>
             </div>
-            <h1>{profile.name}</h1>
+            {!editing ?
+                (<h1>{profile.name}</h1>) :
+                (<input className={"nameInput"} onChange={(e) => (setName(String(e.target.value)))}/>)}
             <h3>{"@" + profile.username}</h3>
             {currentUsername && currentUsername !== profile.username && (
                 <FollowButtonWrapper>
@@ -153,8 +162,12 @@ export default function UserInfo({
                     />
                 </FollowButtonWrapper>
             )}
-            <button onClick={sendProfileUpdate}>Update Profile Info</button>
-            <p>{profile.bio}</p>
+            {!editing ?
+                (<p>{profile.bio}</p>) :
+                (<input className={"bioInput"} onChange={(e) => (setBio(String(e.target.value)))}/>)}
+            {currentUsername === profile.username ? (!editing ?
+                (<button onClick={() => setEditing(true)}>edit profile</button>) :
+                (<button onClick={sendProfileUpdate}>Update Profile Info</button>)) : <></>}
             {currentUsername === profile.username && (
                 <Link href="/blog-post-creation-page" className="newPost">
                     New Post
