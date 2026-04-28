@@ -52,7 +52,10 @@ const UserInfoDiv = styled.div`
     .nameInput {
         grid-column: 1;
         grid-row: 2;
+        height: fit-content;
         width: 100%;
+        font-size: clamp(20px, 3vw, 40px);
+        margin-bottom: 0.25vh;
     }
 
     h3 {
@@ -98,6 +101,17 @@ const UserInfoDiv = styled.div`
         overflow: scroll;
         font-size: clamp(12px, 1.5vw, 22px);
         margin: 1vh 0 0 0;
+    }
+    
+    .bioInput {
+        grid-column: 1;
+        grid-row: 4;
+        height: 40%;
+        width: 100%;
+        resize: none;
+        font-size: clamp(12px, 1.5vw, 22px);
+        margin-bottom: 1vh;
+        padding-bottom: 1vh;
     }
 
     h2 {
@@ -150,7 +164,7 @@ export default function UserInfo({
                 <Image src={profile.image} fill={true} alt={"users's profile picture"}/>
             </div>
             {!editing ?
-                (<h1>{profile.name}</h1>) :
+                (<h1>{name}</h1>) :
                 (<input className={"nameInput"} value={name} aria-label={"name"} onChange={(e) => (setName(String(e.target.value)))}/>)}
             <h3>{"@" + profile.username}</h3>
             {currentUsername && currentUsername !== profile.username && (
@@ -162,11 +176,11 @@ export default function UserInfo({
                 </FollowButtonWrapper>
             )}
             {!editing ?
-                (<p>{profile.bio}</p>) :
-                (<input className={"bioInput"} value={bio} aria-label={"bio"} onChange={(e) => (setBio(String(e.target.value)))}/>)}
+                (<p>{bio}</p>) :
+                (<textarea className={"bioInput"} value={bio} aria-label={"bio"} onChange={(e) => (setBio(String(e.target.value)))}/>)}
             {currentUsername === profile.username ? (!editing ?
-                (<button onClick={() => setEditing(true)}>edit profile</button>) :
-                (<button onClick={sendProfileUpdate}>Update Profile Info</button>)) : <></>}
+                (<button onClick={() => setEditing(true)} className={"newPost"}>Edit Profile</button>) :
+                (<button onClick={sendProfileUpdate} className={"newPost"}>Submit Changes</button>)) : <></>}
             {currentUsername === profile.username && (
                 <Link href="/blog-post-creation-page" className="newPost">
                     New Post
