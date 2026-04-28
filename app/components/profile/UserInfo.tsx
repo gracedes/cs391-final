@@ -7,6 +7,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
 import FollowButton from "@/app/components/profile/FollowButton";
+import updateProfile from "@/lib/updateProfile";
 
 const FollowButtonWrapper = styled.div`
     grid-column: 1 / 3;
@@ -109,6 +110,9 @@ export default function UserInfo({
 }) {
     const [profile, setProfile] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
+    //const [editing, setEditing] = useState(false);
+    //const [bio, setBio] = useState<string | undefined>("");
+    //const [name, setName] = useState("");
 
     useEffect(() => {
         getProfile(username).then((data) => {
@@ -116,6 +120,17 @@ export default function UserInfo({
             setLoading(false);
         });
     }, [username]);
+
+    //if (profile) {
+    //    setName(profile.name);
+    //    setBio(profile.bio);
+    //}
+
+    const sendProfileUpdate = () => {
+        if (profile) {
+            updateProfile(profile.username, profile.name, (profile.bio !== undefined ? profile.bio : ""));
+        }
+    }
 
     if (loading) return (<UserInfoDiv><p>Loading...</p></UserInfoDiv>);
 
@@ -138,6 +153,7 @@ export default function UserInfo({
                     />
                 </FollowButtonWrapper>
             )}
+            <button onClick={sendProfileUpdate}>Update Profile Info</button>
             <p>{profile.bio}</p>
             {currentUsername === profile.username && (
                 <Link href="/blog-post-creation-page" className="newPost">
