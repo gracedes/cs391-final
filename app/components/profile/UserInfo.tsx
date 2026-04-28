@@ -124,13 +124,12 @@ export default function UserInfo({
         getProfile(username).then((data) => {
             setProfile(data);
             setLoading(false);
+            if (data) {
+                setName(data.name);
+                setBio(data.bio);
+            }
         });
     }, [username]);
-
-    //if (profile) {
-    //    setName(profile.name);
-    //    setBio(profile.bio);
-    //}
 
     const sendProfileUpdate = () => {
         if (profile) {
@@ -152,7 +151,7 @@ export default function UserInfo({
             </div>
             {!editing ?
                 (<h1>{profile.name}</h1>) :
-                (<input className={"nameInput"} onChange={(e) => (setName(String(e.target.value)))}/>)}
+                (<input className={"nameInput"} value={name} aria-label={"name"} onChange={(e) => (setName(String(e.target.value)))}/>)}
             <h3>{"@" + profile.username}</h3>
             {currentUsername && currentUsername !== profile.username && (
                 <FollowButtonWrapper>
@@ -164,7 +163,7 @@ export default function UserInfo({
             )}
             {!editing ?
                 (<p>{profile.bio}</p>) :
-                (<input className={"bioInput"} onChange={(e) => (setBio(String(e.target.value)))}/>)}
+                (<input className={"bioInput"} value={bio} aria-label={"bio"} onChange={(e) => (setBio(String(e.target.value)))}/>)}
             {currentUsername === profile.username ? (!editing ?
                 (<button onClick={() => setEditing(true)}>edit profile</button>) :
                 (<button onClick={sendProfileUpdate}>Update Profile Info</button>)) : <></>}
