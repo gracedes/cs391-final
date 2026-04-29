@@ -1,8 +1,18 @@
+/**
+ * FOLLOWING PAGE (Server Component)
+ * ───────────────────────────────────────────────────────────────────────
+ * • Displays posts from users the current user follows.
+ * • Supports sorting by newest/oldest and filtering by a single tag.
+ * • Authentication is checked; missing username redirects to setup.
+ *
+ * Author: Edward Reyna
+ */
+
 import PostsDisplay from "@/app/components/PostDisplay";
 import getFollowingPosts from "@/lib/getFollowingPosts";
-import {auth} from "@/lib/auth";
-import {headers} from "next/headers";
-import {redirect} from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import styled from "styled-components";
@@ -34,15 +44,18 @@ export const metadata: Metadata = {
     description: "Revival's Following page",
 };
 
-export default async function FollowingPage({searchParams,}: {
+export default async function FollowingPage({
+                                                searchParams,
+                                            }: {
     searchParams: Promise<{ sort?: string; tag?: string }>;
 }) {
+    // --- Authentication & user validation ---
     const session = await auth.api.getSession({
-        headers: await headers()
+        headers: await headers(),
     });
 
     if (!session || !session.user) {
-        redirect("/login")
+        redirect("/login");
     }
 
     const currentUser = session.user as any;
@@ -50,10 +63,14 @@ export default async function FollowingPage({searchParams,}: {
         redirect("/setup-username");
     }
 
+    // --- Determine sorting order from the URL query string ---
     const params = await searchParams;
     const sortOrder = params.sort === "oldest" ? "oldest" : "newest";
 
+    // Optional tag filter
     const tag = params.tag;
+
+    // Fetch the posts that the current user follows, applying sort and tag filter.
     const followingPosts = await getFollowingPosts(sortOrder, tag);
 
     return (

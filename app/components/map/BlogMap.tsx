@@ -1,3 +1,14 @@
+/**
+ * BlogMap – Client Component
+ * ───────────────────────────────────────────────────────────────────────
+ * • Renders an interactive map using react-map-gl/maplibre.
+ * • Aggregates post markers using supercluster.
+ * • Shows individual post markers when zoomed in, clusters when zoomed out.
+ * • Requests the user’s location on mount and flies to it.
+ *
+ * Author: Edward Reyna
+ */
+
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
@@ -12,10 +23,10 @@ import MapClusterMarker from "@/app/components/map/MapClusterMarker";
 import styled from "styled-components";
 
 const MapWrapper = styled.div`
-  height: 600px;
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
+    height: 600px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
 `;
 
 const osmStyle: StyleSpecification = {
@@ -32,11 +43,13 @@ const osmStyle: StyleSpecification = {
 };
 
 export default function BlogMap({ posts }: { posts: PostProps[] }) {
+    // Refs and state for map interaction.
     const mapRef = useRef<any>(null);
     const [zoom, setZoom] = useState(12);
     const [bounds, setBounds] = useState<[number, number, number, number] | undefined>(undefined);
     const [selectedPost, setSelectedPost] = useState<PostProps | null>(null);
 
+    // Try to locate the user once the component mounts.
     useEffect(() => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
@@ -51,18 +64,21 @@ export default function BlogMap({ posts }: { posts: PostProps[] }) {
                         });
                     }
                 }
+                // If the user denies location permission, we simply keep the default view.
             );
         }
     }, []);
 
+    // Transform post data into GeoJSON points; only posts with valid coordinates.
     const points = posts
         .filter(post => post.longitude != null && post.latitude !== undefined)
         .map(post => ({
-        type: 'Feature' as const,
-        properties: { cluster: false, postId: post.id },
-        geometry: { type: 'Point' as const, coordinates: [post.longitude, post.latitude] as [number, number] }
-    }));
+            type: 'Feature' as const,
+            properties: { cluster: false, postId: post.id },
+            geometry: { type: 'Point' as const, coordinates: [post.longitude, post.latitude] as [number, number] }
+        }));
 
+    // Supercluster hook: recomputes clusters when bounds or zoom change.
     const { clusters, supercluster } = useSupercluster({
         points,
         bounds,
@@ -70,6 +86,7 @@ export default function BlogMap({ posts }: { posts: PostProps[] }) {
         options: { radius: 75, maxZoom: 20 }
     });
 
+    // Update bounds and zoom whenever the map moves.
     const updateMapState = useCallback(() => {
         if (mapRef.current) {
             const mapBounds = mapRef.current.getMap().getBounds();
@@ -81,6 +98,7 @@ export default function BlogMap({ posts }: { posts: PostProps[] }) {
         }
     }, []);
 
+    // Zoom into a cluster when clicked.
     const handleClusterZoom = (clusterId: number, longitude: number, latitude: number) => {
         if (!supercluster) return;
         const expansionZoom = Math.min(supercluster.getClusterExpansionZoom(clusterId), 20);
@@ -91,7 +109,7 @@ export default function BlogMap({ posts }: { posts: PostProps[] }) {
         <MapWrapper>
             <Map
                 ref={mapRef}
-                initialViewState={{ longitude: -71.1054, latitude: 42.3505, zoom: 14 }}
+                initialViewState={{ longitude: -71.1054, latitude: 42.3505, zoom: 14 }} // BU as default
                 mapStyle={osmStyle}
                 onLoad={updateMapState}
                 onMove={updateMapState}
@@ -123,6 +141,7 @@ export default function BlogMap({ posts }: { posts: PostProps[] }) {
                             longitude={longitude}
                             latitude={latitude}
                             onClick={() => {
+                                // Set the selected post to display its popup.
                                 const clickedPost = posts.find(p => p.id === singleProps.postId);
                                 if (clickedPost) setSelectedPost(clickedPost);
                             }}

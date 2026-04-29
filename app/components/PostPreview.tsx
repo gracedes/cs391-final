@@ -1,5 +1,17 @@
+/**
+ * PostPreview – Client Component
+ * ───────────────────────────────────────────────────────────────────────
+ * • Displays a summary of a single blog post: title, username, truncated
+ *   content, vote counts, creation time, and clickable tags.
+ * • The whole card links to the full post detail page.
+ * • Tags link back to the home page with the selected tag as a filter.
+ * • The currently active tag (if any) is visually highlighted.
+ *
+ * Author: Edward Reyna
+ */
+
 import Link from "next/link";
-import {PostProps} from "@/app/interfaces/PostProps";
+import { PostProps } from "@/app/interfaces/PostProps";
 import styled from "styled-components";
 
 const StyledLink = styled(Link)`
@@ -65,10 +77,11 @@ const StyledTime = styled.p`
     font-size: 0.9rem;
 `;
 
-export default function PostPreview({post, activeTag,}: {
+export default function PostPreview({post, activeTag}: {
     post: PostProps;
     activeTag?: string;
 }) {
+    // Remove duplicate tags (if any) before rendering.
     const uniqueTags = Array.from(new Set(post.tags));
 
     return (
@@ -97,12 +110,13 @@ export default function PostPreview({post, activeTag,}: {
                 </StyledTime>
             </StyledLink>
 
+            {/* Tags are separate from the post link; they lead to filtered views */}
             <TagsDiv>
                 {uniqueTags.map((tag) => (
                     <PostTag
                         key={tag}
                         href={`/?tag=${encodeURIComponent(tag)}`}
-                        $active={activeTag === tag}
+                        $active={activeTag === tag}  // highlight if this tag is the current filter
                     >
                         {tag}
                     </PostTag>
