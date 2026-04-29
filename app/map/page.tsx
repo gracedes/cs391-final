@@ -1,3 +1,14 @@
+/**
+ * MAP PAGE (Server Component)
+ * ───────────────────────────────────────────────────────────────────────
+ * • Renders the interactive blog map.
+ * • Fetches all posts on the server and passes them to the
+ *   client‑side BlogMap component.
+ * • No authentication required – this is a public discovery feature.
+ *
+ * Author: Edward Reyna
+ */
+
 import BlogMap from "@/app/components/map/BlogMap";
 import styled from "styled-components";
 import getAllPosts from "@/lib/getAllPosts";
@@ -27,12 +38,11 @@ const PageWrapper = styled.div`
     }
 `;
 
-
 const PageHeader = styled.h1`
-  margin-bottom: 2%;
-  font-size: calc(2px + 2.2vw);
-  color: white;
-  font-weight: bold;
+    margin-bottom: 2%;
+    font-size: calc(2px + 2.2vw);
+    color: white;
+    font-weight: bold;
     @media (max-width: 800px) {
         margin-bottom: 3.5%;
         font-size: calc(2px + 2.4vw);
@@ -41,9 +51,9 @@ const PageHeader = styled.h1`
 `;
 
 const PageDescription = styled.p`
-  margin-bottom: 2%;
-  font-size: calc(2px + 1.5vw);
-  color: white;
+    margin-bottom: 2%;
+    font-size: calc(2px + 1.5vw);
+    color: white;
     @media (max-width: 800px) {
         margin-bottom: 3.5%;
         font-size: calc(2px + 1.7vw);
@@ -52,8 +62,8 @@ const PageDescription = styled.p`
 `;
 
 export default async function MapPage() {
+    // Fetch all posts once on the server – this data is static for the map.
     const posts = await getAllPosts();
-
 
     return (
         <PageWrapper>
@@ -61,6 +71,7 @@ export default async function MapPage() {
             <PageDescription>
                 Zoom out to see grouped posts, or zoom in to see individual pins!
             </PageDescription>
+            {/* BlogMap is a client component because it uses browser APIs */}
             <BlogMap posts={posts} />
         </PageWrapper>
     );

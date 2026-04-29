@@ -1,7 +1,16 @@
-"use client"
+/**
+ * SignOutButton – Client Component
+ * ───────────────────────────────────────────────────────────────────────
+ * • A button that signs the user out and redirects to the home page (“/”) .
+ * • Uses the authClient with a success callback to navigate programmatically.
+ *
+ * Author: Edward Reyna
+ */
 
-import {useRouter} from "next/navigation";
-import {authClient} from "@/lib/auth-client";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 import styled from "styled-components";
 
 const DropdownMenuButton = styled.button`
@@ -23,6 +32,7 @@ export default function SignOutButton() {
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {
+                    // After successful sign‑out, navigate the user to the landing page.
                     router.push("/");
                 },
             },
@@ -33,5 +43,5 @@ export default function SignOutButton() {
         <DropdownMenuButton onClick={handleSignOut}>
             Sign Out
         </DropdownMenuButton>
-    )
+    );
 }
