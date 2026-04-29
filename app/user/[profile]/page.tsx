@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import {Metadata} from "next";
 
 const ProfilePageDiv = styled.div`
     width: 100vw;
@@ -16,6 +17,18 @@ const ProfilePageDiv = styled.div`
     gap: 0;
     background-color: #232C33;
 `
+
+export async function generateMetadata({params,}: {
+    params: Promise<{ profile: string }>;
+}): Promise<Metadata> {
+    const { profile } = await params;
+
+    // The profile page being viewed
+    return {
+        title: `Revival | ${profile}'s Profile`,
+        description: `${profile}'s Profile Page`,
+    };
+}
 
 export default async function ProfilePage({
                                               params,
