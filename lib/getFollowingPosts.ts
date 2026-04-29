@@ -1,3 +1,6 @@
+// Jenny Yang
+// Get the currently logged-in user's document from MongoDB
+// and retrieve the list of usernames they follow
 import { PostProps } from "@/app/interfaces/PostProps";
 import getCollection, { POSTS_COLLECTION, USERS_COLLECTION } from "@/lib/db";
 import {auth} from "@/lib/auth";
