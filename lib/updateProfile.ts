@@ -10,6 +10,7 @@ export default async function updateProfile(username: string, name: string, bio:
         return;
     }
 
+    // use updateOne to update profile name and bio with inputted values
     const result = await userCollection.updateOne(
         { username: username },
         {

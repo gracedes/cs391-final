@@ -1,5 +1,6 @@
 import {PostProps} from "@/app/interfaces/PostProps";
 
+// user props
 export interface UserProps {
     username: string;
     name: string;

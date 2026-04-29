@@ -10,6 +10,7 @@ import getProfilePosts from "@/lib/getProfilePosts";
 import PostsDisplay from "@/app/components/profile/ProfilePostDisplay";
 import styled from "styled-components";
 
+// fill width of left side of the profile page
 const StyledWrapper = styled.div`
     width: 100%;
     min-height: 20vh;
@@ -40,6 +41,7 @@ export default function UserPosts({ username }: { username: string }) {
     // Tracks whether the posts are still being fetched.
     const [loading, setLoading] = useState(true);
 
+    // fetch posts from backend
     useEffect(() => {
         // Fetch posts for the current username whenever the username changes.
         getProfilePosts(username).then((data) => {
