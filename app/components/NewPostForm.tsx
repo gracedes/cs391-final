@@ -1,32 +1,69 @@
-"use client"
+"use client";
+
+// Responsible: Elizabeth
+// Purpose: This component displays the blog post creation form.
+// It lets a logged-in user create a post with a title, tags, content,
+// and an optional map location pin.
+
 import { useState } from "react";
 import styled from "styled-components";
 import makeBlogPost from "@/lib/makeBlogPost";
-import Map, {Marker} from "react-map-gl/maplibre";
-import 'maplibre-gl/dist/maplibre-gl.css';
+import Map, { Marker } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
 
+// Responsible: Elizabeth
+// This map style uses OpenStreetMap raster tiles.
+// Keeping the style object outside the component prevents it from being
+// recreated every time the form re-renders.
 const osmStyle = {
     version: 8 as const,
     sources: {
-        'osm-tiles': {
-            type: 'raster' as const,
-            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        "osm-tiles": {
+            type: "raster" as const,
+            tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
             tileSize: 256,
-            attribution: '&copy; OpenStreetMap contributors'
-        }
+            attribution: "&copy; OpenStreetMap contributors",
+        },
     },
-    layers: [{ id: 'osm-layer', type: 'raster' as const, source: 'osm-tiles', minzoom: 0, maxzoom: 19 }]
+    layers: [
+        {
+            id: "osm-layer",
+            type: "raster" as const,
+            source: "osm-tiles",
+            minzoom: 0,
+            maxzoom: 19,
+        },
+    ],
 };
 
-export default function NewPostForm({ username }: { username: string}) {
+// Responsible: Elizabeth
+// NewPostForm handles the post creation UI and form state.
+// The username is passed in from the protected page so the post can be
+// connected to the currently logged-in user.
+export default function NewPostForm({ username }: { username: string }) {
+    // Stores the post title typed by the user.
     const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [tags, setTags] = useState<Set<string>>(new Set());
-    const [tagsInput, setTagsInput] = useState("");
-    const [success, setSuccess] = useState(false);
-    const [showMap, setShowMap] = useState(false);
-    const [markerPos, setMarkerPos] = useState<{lng: number, lat: number} | null>(null);
 
+    // Stores the main body/content of the post.
+    const [content, setContent] = useState("");
+
+    // Stores tags as a Set so duplicate tags are automatically removed.
+    const [tags, setTags] = useState<Set<string>>(new Set());
+
+    // Stores the raw tag input string shown in the input box.
+    const [tagsInput, setTagsInput] = useState("");
+
+    // Controls whether the success message appears after post creation.
+    const [success, setSuccess] = useState(false);
+
+    // Controls whether the optional map section is shown.
+    const [showMap, setShowMap] = useState(false);
+
+    // Stores the selected longitude and latitude after the user clicks the map.
+    // It starts as null because the user may choose not to add a location.
+    const [markerPos, setMarkerPos] = useState<{ lng: number; lat: number } | null>(null);
+
+    // When the user clicks the map, save that point as the post's location.
     const handleMapClick = (e: any) => {
         setMarkerPos({ lng: e.lngLat.lng, lat: e.lngLat.lat });
     };
@@ -34,105 +71,141 @@ export default function NewPostForm({ username }: { username: string}) {
     return (
         <PageWrapper>
             <FormSection>
-            <PageTitle>Blog Post Creation</PageTitle>
-            {success && <SuccessMessage>Post created successfully!</SuccessMessage>}
+                <PageTitle>Blog Post Creation</PageTitle>
 
-            <StyledForm
-                onSubmit={(e) => {
-                    e.preventDefault();
+                {/* Only show this message after a post has been successfully created. */}
+                {success && <SuccessMessage>Post created successfully!</SuccessMessage>}
 
-                    makeBlogPost(
-                        title,
-                        content,
-                        Array.from(tags),
-                        username,
-                        showMap ? markerPos?.lng : null,
-                        showMap ? markerPos?.lat : null
-                    )
-                        .then((p) => {
-                            if (!p) return;
+                <StyledForm
+                    onSubmit={(e) => {
+                        // Prevents the browser from refreshing the page on submit.
+                        e.preventDefault();
 
-                            setSuccess(true);
-                            setTitle("");
-                            setContent("");
-                            setTags(new Set());
-                            setTagsInput("");
-                            setMarkerPos(null);
-                            setShowMap(false);
+                        // Sends the post data to the helper function that creates the blog post.
+                        // If the map is turned off, longitude and latitude are sent as null.
+                        makeBlogPost(
+                            title,
+                            content,
+                            Array.from(tags),
+                            username,
+                            showMap ? markerPos?.lng : null,
+                            showMap ? markerPos?.lat : null
+                        )
+                            .then((p) => {
+                                // If the post was not created, stop here.
+                                if (!p) return;
 
-                            setTimeout(() => setSuccess(false), 3000);
-                        })
-                        .catch((err) => console.error(err));
-                }}
-            >
-                <StyledInput
-                    type="text"
-                    placeholder="Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+                                // Show a temporary success message.
+                                setSuccess(true);
 
-                <StyledInput
-                    type="text"
-                    placeholder="Tags (space-separated)"
-                    value={tagsInput}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        setTagsInput(value);
+                                // Clear the form after a successful submission.
+                                setTitle("");
+                                setContent("");
+                                setTags(new Set());
+                                setTagsInput("");
+                                setMarkerPos(null);
+                                setShowMap(false);
 
-                        const tagArray = value
-                            .split(" ")
-                            .map((tag) => tag.trim())
-                            .filter((tag) => tag !== "");
-
-                        setTags(new Set(tagArray));
+                                // Hide the success message after 3 seconds.
+                                setTimeout(() => setSuccess(false), 3000);
+                            })
+                            // Logs errors so debugging is easier if post creation fails.
+                            .catch((err) => console.error(err));
                     }}
-                />
+                >
+                    <StyledInput
+                        type="text"
+                        placeholder="Title"
+                        value={title}
+                        // Updates title state whenever the user types.
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
 
-                <StyledTextarea
-                    placeholder="Content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
+                    <StyledInput
+                        type="text"
+                        placeholder="Tags (space-separated)"
+                        value={tagsInput}
+                        onChange={(e) => {
+                            const value = e.target.value;
 
-                <MapToggleWrapper>
-                    <label style={{ color: 'white', fontSize: '1.2rem', marginBottom: '10px' }}>
-                        <input
-                            type="checkbox"
-                            checked={showMap}
-                            onChange={(e) => setShowMap(e.target.checked)}
-                            style={{ marginRight: '10px' }}
-                        />
-                        Add a location to this post?
-                    </label>
-                </MapToggleWrapper>
+                            // Keep the input text controlled by React state.
+                            setTagsInput(value);
 
-                {showMap && (
-                    <MapContainer>
-                        <p style={{ color: 'white', textAlign: 'center', marginBottom: '10px' }}>Click on the map to drop a pin.</p>
-                        <MapWrapper>
-                            <Map
-                                initialViewState={{ longitude: -71.1054, latitude: 42.3505, zoom: 12 }}
-                                mapStyle={osmStyle}
-                                onClick={handleMapClick}
-                                cursor="pointer"
-                            >
-                                {markerPos && (
-                                    <Marker longitude={markerPos.lng} latitude={markerPos.lat} color="red" />
-                                )}
-                            </Map>
-                        </MapWrapper>
-                    </MapContainer>
-                )}
+                            // Split tags by spaces, remove extra whitespace,
+                            // and ignore empty values.
+                            const tagArray = value
+                                .split(" ")
+                                .map((tag) => tag.trim())
+                                .filter((tag) => tag !== "");
 
-                <ButtonWrapper>
-                    <StyledButton type="submit">Create</StyledButton>
-                </ButtonWrapper>
-            </StyledForm>
+                            // Store tags in a Set to avoid duplicate tags.
+                            setTags(new Set(tagArray));
+                        }}
+                    />
+
+                    <StyledTextarea
+                        placeholder="Content"
+                        value={content}
+                        // Updates content state whenever the user types.
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+
+                    <MapToggleWrapper>
+                        <label style={{ color: "white", fontSize: "1.2rem", marginBottom: "10px" }}>
+                            <input
+                                type="checkbox"
+                                checked={showMap}
+                                // Shows or hides the map based on whether the user wants a location.
+                                onChange={(e) => setShowMap(e.target.checked)}
+                                style={{ marginRight: "10px" }}
+                            />
+                            Add a location to this post?
+                        </label>
+                    </MapToggleWrapper>
+
+                    {/* The map only appears when the user chooses to add a location. */}
+                    {showMap && (
+                        <MapContainer>
+                            <p style={{ color: "white", textAlign: "center", marginBottom: "10px" }}>
+                                Click on the map to drop a pin.
+                            </p>
+
+                            <MapWrapper>
+                                <Map
+                                    // Starts the map around Boston/Boston University.
+                                    initialViewState={{
+                                        longitude: -71.1054,
+                                        latitude: 42.3505,
+                                        zoom: 12,
+                                    }}
+                                    mapStyle={osmStyle}
+                                    onClick={handleMapClick}
+                                    cursor="pointer"
+                                >
+                                    {/* Only render the marker after the user has clicked the map. */}
+                                    {markerPos && (
+                                        <Marker
+                                            longitude={markerPos.lng}
+                                            latitude={markerPos.lat}
+                                            color="red"
+                                        />
+                                    )}
+                                </Map>
+                            </MapWrapper>
+                        </MapContainer>
+                    )}
+
+                    <ButtonWrapper>
+                        <StyledButton type="submit">Create</StyledButton>
+                    </ButtonWrapper>
+                </StyledForm>
             </FormSection>
         </PageWrapper>
     );
 }
+
+// Responsible: Elizabeth
+// Styled components below control the layout and appearance of this form.
 
 const PageTitle = styled.h1`
     margin-top: 2%;
