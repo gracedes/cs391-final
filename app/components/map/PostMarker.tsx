@@ -1,16 +1,25 @@
+/**
+ * PostMarker – Client Component
+ * ───────────────────────────────────────────────────────────────────────
+ * • Renders a single post (pin) on the map.
+ * • Clicking the pin triggers the parent’s onClick, which opens the popup.
+ *
+ * Author: Edward Reyna
+ */
+
 'use client';
 import { Marker } from 'react-map-gl/maplibre';
-import {PostMarkerProps} from "@/app/interfaces/PostMarkerProps";
+import { PostMarkerProps } from "@/app/interfaces/PostMarkerProps";
 import styled from "styled-components";
 
 const PinMarker = styled.div`
-  background-color: #ef4444;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  cursor: pointer;
+    background-color: #ef4444;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    cursor: pointer;
 `;
 
 export default function PostMarker({ postId, longitude, latitude, onClick }: PostMarkerProps) {
@@ -20,6 +29,7 @@ export default function PostMarker({ postId, longitude, latitude, onClick }: Pos
             longitude={longitude}
             latitude={latitude}
             onClick={(e) => {
+                // Prevent map click from propagating while handling the pin click.
                 e.originalEvent.stopPropagation();
                 onClick();
             }}
