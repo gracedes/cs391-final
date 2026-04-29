@@ -6,6 +6,7 @@ import getProfilePosts from "@/lib/getProfilePosts";
 import PostsDisplay from "@/app/components/profile/ProfilePostDisplay";
 import styled from "styled-components";
 
+// fill width of left side of the profile page
 const StyledWrapper = styled.div`
     width: 100%;
     min-height: 20vh;
@@ -25,9 +26,11 @@ const StyledText = styled.p`
 `;
 
 export default function UserPosts({ username }: { username: string }) {
+    // posts are stored as an array of post props
     const [posts, setPosts] = useState<PostProps[] | null>(null);
     const [loading, setLoading] = useState(true);
 
+    // fetch posts from backend
     useEffect(() => {
         getProfilePosts(username).then((data) => {
             setPosts(data);

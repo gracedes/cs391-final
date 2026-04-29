@@ -8,6 +8,7 @@ import {usePathname} from "next/navigation";
 import getProfile from "@/lib/getProfile";
 import {useEffect, useState} from "react";
 
+// styling for the bar background itself
 const NavBar = styled.nav`
     display: flex;
     flex-direction: row;
@@ -21,6 +22,7 @@ const NavBar = styled.nav`
     font-size: calc(14px + 0.75vw);
 `;
 
+// this div holds the three center links, using auto margin to center them with space on either side
 const LinksDiv = styled.div`
     display: flex;
     margin: 0 auto;
@@ -28,6 +30,7 @@ const LinksDiv = styled.div`
     justify-content: space-evenly;
 `;
 
+// styling for the three center links
 const StyledLinks = styled(Link)`
     color: white;
     text-decoration: none;
@@ -38,6 +41,7 @@ const StyledLinks = styled(Link)`
     width: fit-content;
 `;
 
+// props are used to style the link for the current page
 const DiscoverLink = styled(StyledLinks)<{ $page: string }>`
     ${props => props.$page === '/' && css`
         background-color: white;
@@ -62,6 +66,7 @@ const MapLink = styled(StyledLinks)<{ $page: string }>`
     `}
 `;
 
+// the wordmark logo on the left side
 const Wordmark = styled(Link)`
     font-family: "Syncopate", sans-serif;
     font-weight: 400;
@@ -73,10 +78,11 @@ const Wordmark = styled(Link)`
 `;
 
 export default function Nav() {
+    // the client session is used to update the profile picture displayed
     const { data: session, isPending } = authClient.useSession();
-
+    // start off with default (signed-out) image
     const [profilePicture, setProfilePicture] = useState("/temp-pfp.png");
-
+    // if a profile is signed in, set the image to their user image
     useEffect(() => {
         if (session) {
             getProfile(session.user.username).then((data) => {
@@ -86,11 +92,12 @@ export default function Nav() {
             });
         }}, [session]);
 
-
+    // pathname is passed into each link as props
     const pathname = usePathname()
 
     return (
         <NavBar>
+            {/* we opted to have the wordmark link back to the root page because of muscle memory */}
             <Wordmark href="/">Revival</Wordmark>
             <LinksDiv>
                 <DiscoverLink href="/" $page={pathname}>Discover</DiscoverLink>

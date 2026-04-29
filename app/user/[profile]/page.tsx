@@ -22,17 +22,20 @@ export default async function ProfilePage({
                                           }: {
     params: Promise<{ profile: string }>;
 }) {
+    // get the username of the profile to display
     const { profile } = await params;
-
+    // get the session headers from the auth api
     const session = await auth.api.getSession({
         headers: await headers(),
     });
-
+    // current user if session exists
     const currentUser = session?.user as any;
 
     return (
         <ProfilePageDiv>
             <UserPosts username={profile} />
+            {/* pass not only the user to display, but also the currently logged-in user
+                and if they  are following the user to display */}
             <UserInfo
                 username={profile}
                 currentUsername={currentUser?.username}
