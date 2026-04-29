@@ -1,3 +1,7 @@
+//Jenny
+// Wrapper function for downvoting a post.
+// Calls the shared voteOnPost logic with "down" as the vote type.
+
 "use server"
 
 import { headers } from "next/headers";

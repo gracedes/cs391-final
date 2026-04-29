@@ -1,3 +1,8 @@
+//Jenny
+// Handles voting logic for posts.
+// Ensures each user can only have one active vote (up or down),
+// and updates vote counts accordingly in MongoDB.
+
 import getCollection, { POSTS_COLLECTION } from "@/lib/db";
 import { ObjectId } from "mongodb";
 import { PostProps } from "@/app/interfaces/PostProps";

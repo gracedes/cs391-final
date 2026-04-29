@@ -1,3 +1,7 @@
+//Jenny
+// Server action to handle following a user.
+// Adds the target username to the current user's "following" list in MongoDB.
+
 "use server";
 
 import { headers } from "next/headers";
