@@ -1,3 +1,8 @@
+//Jenny
+// Server action to handle unfollowing a user.
+// Removes the target username from the current user's "following" list in MongoDB.
+
+
 "use server";
 
 import { headers } from "next/headers";

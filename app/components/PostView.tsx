@@ -1,3 +1,8 @@
+//Jenny
+// Displays a full blog post view with voting functionality.
+// Handles user interactions (upvote/downvote) and updates UI state
+// based on responses from the backend.
+
 "use client";
 
 import { PostProps } from "@/app/interfaces/PostProps";

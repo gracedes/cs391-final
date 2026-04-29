@@ -1,3 +1,7 @@
+//Jenny
+// Wrapper function for upvoting a post.
+// Calls the shared voteOnPost logic with "up" as the vote type.
+
 "use server";
 
 import { headers } from "next/headers";

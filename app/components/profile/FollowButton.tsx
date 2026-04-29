@@ -1,3 +1,7 @@
+//Jenny
+// Client component for handling follow/unfollow interactions.
+// Toggles follow state and communicates with server actions to update MongoDB.
+
 "use client";
 
 import { useState } from "react";
