@@ -16,6 +16,9 @@ export default async function getProfilePosts(username:string):Promise<PostProps
             image: p.image,
             upvotes: p.upvotes,
             downvotes: p.downvotes,
+            longitude: p.longitude,
+            latitude: p.latitude,
+            createdAt: p.createdAt
         }
     ));
 
