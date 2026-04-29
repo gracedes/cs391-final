@@ -33,5 +33,5 @@ export default async function AuthRouting() {
     }
 
     // Everything is fine – go to the profile page.
-    redirect("/profile");
+    redirect(`/user/${currentUser.username}`);
 }
